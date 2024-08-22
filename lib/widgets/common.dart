@@ -79,14 +79,14 @@ InputDecoration inputDecoration({
 }
 
 TextFormField inputEmail({
-   TextEditingController? emailController,
-}){
+  TextEditingController? emailController,
+}) {
   return TextFormField(
     decoration: inputDecoration(
       label: df("df_email"),
       prefixIcon: const Icon(Icons.mail),
     ),
-    controller:emailController,
+    controller: emailController,
     validator: (value) {
       return !Validator.isEmail(value) ? df("df_required_email") : null;
     },
@@ -94,45 +94,39 @@ TextFormField inputEmail({
   );
 }
 
-
-
 TextFormField inputPassword({
   TextEditingController? passwordController,
-}){
-  return
-    TextFormField(
-      decoration: inputDecoration(
-        label: df("df_password"),
-        prefixIcon: const Icon(Icons.lock),
-      ),
-      obscureText: true,
-      controller: passwordController,
-      validator: (value) {
-        return !Validator.isPassword(value) ? df("df_required_password") : null;
-      },
-      textInputAction: TextInputAction.next,
-    );
+}) {
+  return TextFormField(
+    decoration: inputDecoration(
+      label: df("df_password"),
+      prefixIcon: const Icon(Icons.lock),
+    ),
+    obscureText: true,
+    controller: passwordController,
+    validator: (value) {
+      return !Validator.isPassword(value) ? df("df_required_password") : null;
+    },
+    textInputAction: TextInputAction.next,
+  );
 }
 
-
-MaterialButton button({
-  String text = "",
-  Icon? icon,
-  Color? color,
-  VoidCallback? onPressed,
-  double borderRadius = 12,
-  Color? borderColor,
-  Color? textColor
-}) {
+MaterialButton button(
+    {String text = "",
+    Icon? icon,
+    Color? color,
+    VoidCallback? onPressed,
+    double borderRadius = 12,
+    Color? borderColor,
+    Color? textColor}) {
   color ??= SettingsController.themeColor;
   return MaterialButton(
-
     elevation: 0,
     onPressed: onPressed,
     color: color,
     padding: const EdgeInsets.all(15),
     shape: RoundedRectangleBorder(
-        side: BorderSide(color:borderColor??Colors.transparent ),
+        side: BorderSide(color: borderColor ?? Colors.transparent),
         borderRadius: BorderRadius.circular(borderRadius)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +143,7 @@ MaterialButton button({
             : const SizedBox(),
         Text(
           text,
-          style: TextStyle(color:textColor ?? Colors.white),
+          style: TextStyle(color: textColor ?? Colors.white),
         )
       ],
     ),
@@ -160,19 +154,23 @@ Widget br([double height = 20]) {
   return SizedBox(height: height);
 }
 
-Transition appTransition(){
+Transition appTransition() {
   return Transition.rightToLeft;
 }
 
-Widget label(String text){
+Widget label(String text) {
   return Row(
     children: [
-      Text(text,style: TextStyle(color: SettingsController.themeColor,fontWeight: FontWeight.bold),),
+      Text(
+        text,
+        style: TextStyle(
+            color: SettingsController.themeColor, fontWeight: FontWeight.bold),
+      ),
     ],
   );
 }
 
-Widget appLoader(){
+Widget appLoader() {
   return const CircularProgressIndicator();
 }
 
@@ -180,10 +178,20 @@ Image logo() {
   return Image.asset("assets/app/logo.jpg");
 }
 
+colorStyle(
+    {bool isBold = false, Color color = Colors.white70, isSmall = false}) {
+  return TextStyle(
+      color: color,
+      fontWeight: isBold ? FontWeight.bold : null,
+      fontSize: isSmall ? 12 : null);
+}
 
-SnackbarController toast({String title = "title" , String message ="message" ,String status = "status"}){
-
-  Color? color = (status=="success")? Colors.green[200]:Colors.redAccent[200];
+SnackbarController toast(
+    {String title = "title",
+    String message = "message",
+    String status = "status"}) {
+  Color? color =
+      (status == "success") ? Colors.green[200] : Colors.redAccent[200];
   return Get.snackbar(
     title,
     message,
@@ -192,42 +200,36 @@ SnackbarController toast({String title = "title" , String message ="message" ,St
   );
 }
 
-Widget authRequired(Widget layout){
-  return (!isAuth())?loginRequired():layout;
+Widget authRequired(Widget layout) {
+  return (!isAuth()) ? loginRequired() : layout;
 }
 
-
-Widget loginRequired(){
+Widget loginRequired() {
   return scaffold(
       appBarText: df("df_auth_required"),
       body: Container(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children:[
-            br(50),
-            Image.asset('assets/images/login.png'),
-            br(20),
-            Text(df("df_user_auth_required")),
-            br(20),
-            button(
-                text: "Login",
-                color: Colors.blueGrey,
-                onPressed: () {
-                  Get.to(() =>  Login(), transition: appTransition());
-                }),
-            br(20),
-            button(
-                text: "Register",
-                color: Colors.white,
-                textColor: Colors.blueGrey,
-                borderColor: Colors.blueGrey,
-                onPressed: () {
-                  Get.to(() =>const Register(), transition: appTransition());
-                }),
-
-
-          ]
-        ),
-      )
-  );
+        child: Column(children: [
+          br(50),
+          Image.asset('assets/images/login.png'),
+          br(20),
+          Text(df("df_user_auth_required")),
+          br(20),
+          button(
+              text: "Login",
+              color: Colors.blueGrey,
+              onPressed: () {
+                Get.to(() => Login(), transition: appTransition());
+              }),
+          br(20),
+          button(
+              text: "Register",
+              color: Colors.white,
+              textColor: Colors.blueGrey,
+              borderColor: Colors.blueGrey,
+              onPressed: () {
+                Get.to(() => const Register(), transition: appTransition());
+              }),
+        ]),
+      ));
 }

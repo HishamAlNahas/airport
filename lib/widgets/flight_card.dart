@@ -1,11 +1,11 @@
 import 'package:airport/controllers/settings_controller.dart';
 import 'package:airport/helpers/globals.dart';
 import 'package:airport/widgets/image.dart';
-import 'package:airport/widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../screens/flight_page.dart';
+import 'common.dart';
 
 class FlightCard extends StatelessWidget {
   final Map data;
@@ -45,37 +45,33 @@ class FlightCard extends StatelessWidget {
           children: [
             Directionality(
               textDirection: TextDirection.ltr,
-              child: Stack(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const ImageToTransparent("assets/images/plane2.png",
                       height: 40),
-                  Center(
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 2),
-                        decoration: BoxDecoration(
-                            gradient: const LinearGradient(colors: [
-                              Color(0xffB8860B),
-                              Color(0xffd4af37),
-                              Color(0xffffd700),
-                            ]),
-                            borderRadius: BorderRadius.circular(45)),
-                        child: Text(
-                          "${data["flight_no"]}",
-                          style:
-                              colorStyle(color: Colors.black54, isBold: true),
-                        )),
-                  ),
-                  Positioned(
-                    top: -10,
-                    right: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.bookmark_border_rounded)),
-                    ),
-                  ),
+                  Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [
+                            Color(0xffB8860B),
+                            Color(0xffd4af37),
+                            Color(0xffffd700),
+                          ]),
+                          borderRadius: BorderRadius.circular(45)),
+                      child: Text(
+                        "${data["flight_no"]}",
+                        style: colorStyle(color: Colors.black54, isBold: true),
+                      )),
+                  /*Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.bookmark_border_rounded)),
+                  ),*/
                 ],
               ),
             ),

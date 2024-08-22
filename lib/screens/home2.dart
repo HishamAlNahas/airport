@@ -1,21 +1,57 @@
 import 'dart:async';
 
+import 'package:airport/controllers/flight_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
-import '../controllers/flight_controller.dart';
 import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
-import '../widgets/flight_card.dart';
+import '../widgets/common.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+/*class STable extends StatelessWidget {
+  const STable({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  Widget build(BuildContext context) {
+    return scaffold(
+        backgroundColor: Colors.black,
+        appBarText: "dd",
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Table(
+                border: TableBorder.all(color: Colors.white24),
+                children: List.generate(
+                    FlightController.departure.value['2024-08-22'].length,
+                        (index) => fn(FlightController.departure.value['2024-08-22']
+                    [index]))),
+          ),
+        ));
+  }
+
+  fn(Map data) {
+    return TableRow(
+      children: [
+        Text(style: colorStyle(isSmall: true), data["normal_time"]),
+        Text(style: colorStyle(isSmall: true), data['country_name']),
+        Text(style: colorStyle(isSmall: true), data["city_name"]),
+        //Text(style: colorStyle(isSmall: true), data["VIA"]),
+        //Text(style: colorStyle(isSmall: true), data['_path']),
+        Text(style: colorStyle(isSmall: true), data["status"]),
+        Text(style: colorStyle(isSmall: true), data["estmtd_real_time"]),
+      ],
+    );
+  }
+}*/
+
+class STable extends StatefulWidget {
+  const STable({super.key});
+
+  @override
+  State<STable> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<STable> {
   final formKey = GlobalKey<FormState>();
   late final List<Widget> bodies;
 
@@ -72,23 +108,26 @@ class _HomeState extends State<Home> {
               bottom: PreferredSize(
                   preferredSize: const Size(double.infinity, 10),
                   child: TabBar(tabs: tabs))),
-          body: bodies[selectedIndex],
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: bodies[selectedIndex],
+          ),
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             backgroundColor: SettingsController.themeColor,
             type: BottomNavigationBarType.fixed,
-            // Ensures all items are visible
+// Ensures all items are visible
             currentIndex: selectedIndex,
             onTap: (index) {
               selectedIndex = index;
               setState(() {});
             },
             selectedItemColor: Colors.white,
-            // Highlighted tab color
+// Highlighted tab color
             unselectedItemColor: Colors.grey,
-            // Unselected tab color
+// Unselected tab color
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            // Bold text for selected item
+// Bold text for selected item
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(
@@ -134,7 +173,7 @@ class _HomeState extends State<Home> {
         } else {
           return ListView.builder(
             itemBuilder: (context, index) {
-              return FlightCard(
+              return flightCard2(
                 data: flights[index],
               );
             },
@@ -163,7 +202,7 @@ class _HomeState extends State<Home> {
         } else {
           return ListView.builder(
             itemBuilder: (context, index) {
-              return FlightCard(
+              return flightCard2(
                 data: flights[index],
               );
             },
@@ -173,6 +212,38 @@ class _HomeState extends State<Home> {
       }));
     }
     return TabBarView(children: list);
+  }
+
+  Widget flightCard2({var data}) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data["normal_time"]}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data['country_name']}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true), "${data["city_name"]}")),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true), '${data["status"]}')),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data["estmtd_real_time"]}")),
+          ],
+        ),
+        const Divider(),
+      ],
+    );
   }
 }
 // make the api return data sperated by the day

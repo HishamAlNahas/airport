@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import '../controllers/settings_controller.dart';
 import '../helpers/http_helper.dart';
 import '../widgets/common.dart';
-import 'home.dart';
+import 'home2.dart';
 import 'http_error.dart';
 
 class Index extends StatefulWidget {
@@ -43,7 +43,7 @@ class _IndexState extends State<Index> {
     if (HttpHelper.hasError()) {
       Get.offAll(() => const HttpError(), transition: Transition.rightToLeft);
     } else {
-      Get.off(() => const Home());
+      Get.off(() => STable());
     }
   }
 }
