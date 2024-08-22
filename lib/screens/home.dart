@@ -147,13 +147,12 @@ class _HomeState extends State<Home> {
     List<Widget> list = [];
     for (int i = 0; i < FlightController.dates.length; i++) {
       var date = FlightController.dates[i]['STM_DATE'];
-      print("uunn");
-      print(date);
-      print(FlightController.departure.value[date].length);
       list.add(Obx(() {
+        var flights;
         var departure = FlightController.departure.value;
-        var flights = departure[date]?;
-
+        if (departure.containsKey(date)) {
+          flights = departure?[date];
+        }
         if (flights == null || flights.length == 0) {
           return const Center(
             child: Text("No Data"),

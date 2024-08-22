@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../helpers/globals.dart';
-
 class Flight extends StatelessWidget {
   Flight({super.key});
 
@@ -13,7 +11,6 @@ class Flight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    parr("kkkkkkkkkkkkkk");
     return Scaffold(
       appBar: AppBar(
         title: Image.asset("assets/images/logo.png"),
