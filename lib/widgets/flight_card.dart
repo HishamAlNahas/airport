@@ -45,28 +45,37 @@ class FlightCard extends StatelessWidget {
           children: [
             Directionality(
               textDirection: TextDirection.ltr,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: [
                   const ImageToTransparent("assets/images/plane2.png",
                       height: 40),
-                  Padding(
+                  Center(
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 2),
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [
+                              Color(0xffB8860B),
+                              Color(0xffd4af37),
+                              Color(0xffffd700),
+                            ]),
+                            borderRadius: BorderRadius.circular(45)),
+                        child: Text(
+                          "${data["flight_no"]}",
+                          style:
+                              colorStyle(color: Colors.black54, isBold: true),
+                        )),
+                  ),
+                  Positioned(
+                    top: -10,
+                    right: 10,
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 2),
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [
-                                Color(0xffB8860B),
-                                Color(0xffd4af37),
-                                Color(0xffffd700),
-                              ]),
-                              borderRadius: BorderRadius.circular(45)),
-                          child: Text(
-                            "${data["flight_no"]}",
-                            style:
-                                colorStyle(color: Colors.black54, isBold: true),
-                          )))
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.bookmark_border_rounded)),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -76,26 +85,16 @@ class FlightCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data["country_name"] ?? myPref("df_err"),
-                        style: colorStyle(isBold: true),
-                      ),
-                      Text(
-                        data["city_name"] ?? myPref("df_err"),
-                        style: colorStyle(),
-                      ),
-                    ],
+                  Text(
+                    data["city_name"] ?? myPref("df_err"),
+                    style: colorStyle(isBold: true),
                   ),
                   Text(
                     data["status"] ?? myPref("df_err"),
-                    style: colorStyle(),
+                    style: colorStyle(isBold: true),
                   ),
                   Text(data["estmtd_real_time"] ?? myPref("df_err"),
-                      style: colorStyle()),
+                      style: colorStyle(isBold: true)),
                 ],
               ),
             )

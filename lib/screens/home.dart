@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final formKey = GlobalKey<FormState>();
   late final List<Widget> bodies;
+
   @override
   void initState() {
     super.initState();
@@ -43,12 +45,17 @@ class _HomeState extends State<Home> {
           appBar: AppBar(
               backgroundColor: SettingsController.themeColor.withOpacity(0.7),
               centerTitle: true,
-              leading: IconButton(
+              leading: /* IconButton(
                   onPressed: () {},
                   icon: const Icon(
                     Icons.search,
                     color: Colors.white,
-                  )),
+                  )),*/
+                  AnimSearchBar(
+                      width: 350,
+                      textController: TextEditingController(),
+                      onSuffixTap: () {},
+                      onSubmitted: (val) {}),
               title: Text(
                 myPref("df_flight_info"),
                 style: const TextStyle(
@@ -75,17 +82,19 @@ class _HomeState extends State<Home> {
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             backgroundColor: SettingsController.themeColor,
-            type:
-                BottomNavigationBarType.fixed, // Ensures all items are visible
+            type: BottomNavigationBarType.fixed,
+            // Ensures all items are visible
             currentIndex: selectedIndex,
             onTap: (index) {
               selectedIndex = index;
               setState(() {});
             },
-            selectedItemColor: Colors.white, // Highlighted tab color
-            unselectedItemColor: Colors.grey, // Unselected tab color
-            selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold), // Bold text for selected item
+            selectedItemColor: Colors.white,
+            // Highlighted tab color
+            unselectedItemColor: Colors.grey,
+            // Unselected tab color
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            // Bold text for selected item
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(
