@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:airport/controllers/flight_controller.dart';
+import 'package:airport/screens/saved_flights.dart';
 import 'package:airport/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
@@ -78,79 +79,89 @@ class _HomeState extends State<STable> {
     return DefaultTabController(
       length: FlightController.dates.length,
       child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => SearchDialog(),
-                    );
+        appBar: AppBar(
+            backgroundColor: SettingsController.themeColor.withOpacity(0.7),
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => SearchDialog(),
+                  );
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                )),
+            title: Text(
+              myPref("df_flight_info"),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
+              IconButton(
+                  onPressed: () async {
+                    await SettingsController.changeLanguage();
+                    await refresh();
                   },
                   icon: const Icon(
-                    Icons.search,
+                    Icons.language,
                     color: Colors.white,
-                  )),
-              title: Text(
-                myPref("df_flight_info"),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              ),
-              actions: [
-                IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
-                IconButton(
-                    onPressed: () async {
-                      await SettingsController.changeLanguage();
-                      await refresh();
-                    },
-                    icon: const Icon(
-                      Icons.language,
-                      color: Colors.white,
-                    ))
-              ],
-              bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 10),
-                  child: TabBar(tabs: tabs))),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: bodies[selectedIndex],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            elevation: 0,
-            backgroundColor: SettingsController.themeColor,
-            type: BottomNavigationBarType.fixed,
-// Ensures all items are visible
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              selectedIndex = index;
-              setState(() {});
-            },
-            selectedItemColor: Colors.white,
-// Highlighted tab color
-            unselectedItemColor: Colors.grey,
-// Unselected tab color
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-// Bold text for selected item
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_land_rounded,
-                  size: 20,
-                ),
-                label: myPref('df_arrival'),
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_takeoff_rounded,
-                  size: 20,
-                ),
-                label: myPref('df_departure'),
-              ),
+                  ))
             ],
-          )),
+            bottom: PreferredSize(
+                preferredSize: const Size(double.infinity, 10),
+                child: TabBar(tabs: tabs))),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: bodies[selectedIndex],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: SettingsController.themeColor,
+          type: BottomNavigationBarType.fixed,
+// Ensures all items are visible
+          currentIndex: selectedIndex,
+          onTap: (index) {
+            selectedIndex = index;
+            setState(() {});
+          },
+          selectedItemColor: Colors.white,
+// Highlighted tab color
+          unselectedItemColor: Colors.grey,
+// Unselected tab color
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+// Bold text for selected item
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.flight_land_rounded,
+                size: 20,
+              ),
+              label: myPref('df_arrival'),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.flight_takeoff_rounded,
+                size: 20,
+              ),
+              label: myPref('df_departure'),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Get.to(() => SavedFlights());
+          },
+          child: const Icon(
+            Icons.favorite,
+            color: Colors.black,
+          ),
+        ),
+      ),
     );
   }
 
@@ -173,8 +184,8 @@ class _HomeState extends State<STable> {
         var flights = arrival[date];
 
         if (flights == null || flights.length == 0) {
-          return const Center(
-            child: Text("No Data"),
+          return Center(
+            child: Text(myPref("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -202,8 +213,8 @@ class _HomeState extends State<STable> {
           flights = departure?[date];
         }
         if (flights == null || flights.length == 0) {
-          return const Center(
-            child: Text("No Data"),
+          return Center(
+            child: Text(myPref("df_no_data")),
           );
         } else {
           return ListView.builder(

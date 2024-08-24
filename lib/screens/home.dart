@@ -130,8 +130,8 @@ class _HomeState extends State<Home> {
         var flights = arrival[date];
 
         if (flights == null || flights.length == 0) {
-          return const Center(
-            child: Text("No Data"),
+          return Center(
+            child: Text(myPref("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -159,8 +159,8 @@ class _HomeState extends State<Home> {
           flights = departure?[date];
         }
         if (flights == null || flights.length == 0) {
-          return const Center(
-            child: Text("No Data"),
+          return Center(
+            child: Text(myPref("df_no_data")),
           );
         } else {
           return ListView.builder(

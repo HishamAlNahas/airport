@@ -17,30 +17,14 @@ class FlightController extends GetxController {
         {"type": "A", "lang": lang(), "searchText": searchText});
     isLoading.value = false;
     dates = await fetch("$endPoint?action=select", {"dates": "true"});
-    if (departureResponse != null) {
+    if (departureResponse != null || true) {
       departure.value.clear();
-      var data = {};
-      for (var date in dates) {
-        data.addAll({
-          "${date['STM_DATE']}": departureResponse
-              .where((element) => element['day'] == date['STM_DATE'])
-              .toList()
-        });
-      }
-      departure.assignAll(data);
+      departure.assignAll(departureResponse);
     }
 
-    if (arrivalResponse != null) {
+    if (arrivalResponse != null || true) {
       arrival.value.clear();
-      var data = {};
-      for (var date in dates) {
-        data.addAll({
-          "${date['STM_DATE']}": arrivalResponse
-              .where((element) => element['day'] == date['STM_DATE'])
-              .toList()
-        });
-      }
-      arrival.assignAll(data);
+      arrival.assignAll(arrivalResponse);
     }
   }
 }

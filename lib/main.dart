@@ -9,6 +9,9 @@ void main() {
         textTheme: _buildTextTheme(ThemeData.dark().textTheme, Colors.black),
         fontFamily: "Dubai",
         primaryColor: Colors.white,
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.white54,
+        ),
         tabBarTheme: const TabBarTheme(
             unselectedLabelColor: Colors.grey,
             labelColor: Colors.white,

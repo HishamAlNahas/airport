@@ -39,6 +39,8 @@ class SettingsController extends GetxController {
     "df_real_ar": "الوقت الحقيقي",
     "df_search_by_number_or_city_en": "Search by flight number or city name",
     "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
+    "df_no_data_en": "No Data",
+    "df_no_data_ar": "لا يجود معلومات"
   }.obs;
   //لإ×]× remove them from the preferneces  TODO
   static var preferences = {
@@ -70,6 +72,8 @@ class SettingsController extends GetxController {
     "df_real_ar": "الوقت الحقيقي",
     "df_search_by_number_or_city_en": "Search by flight number or city name",
     "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
+    "df_no_data_en": "No Data",
+    "df_no_data_ar": "لا يجود معلومات"
   }.obs;
   static var lang = "en".obs;
   static var dirc = "ltr".obs;
