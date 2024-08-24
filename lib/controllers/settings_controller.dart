@@ -62,6 +62,8 @@ class SettingsController extends GetxController {
     "df_from_ar": "من",
     "df_city_en": "City",
     "df_city_ar": "المدينة",
+    "df_country_en": "Country",
+    "df_country_ar": "الدولة",
     "df_via_en": "Via",
     "df_via_ar": "عبر",
     "df_counter_en": "Counter",
@@ -73,7 +75,17 @@ class SettingsController extends GetxController {
     "df_search_by_number_or_city_en": "Search by flight number or city name",
     "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
     "df_no_data_en": "No Data",
-    "df_no_data_ar": "لا يجود معلومات"
+    "df_no_data_ar": "لا يجود معلومات",
+    "df_saved_flights_en": "Saved Flights",
+    "df_saved_flights_ar": "الرحلات المحفوظة",
+    "df_saved_en": "Saved",
+    "df_saved_ar": "تم حفظها",
+    "df_saved_message_en": "added to the saved flights",
+    "df_saved_message_ar": "تم اضافتها لصفحة الرحلات المحفوظة",
+    "df_deleted_en": "deleted",
+    "df_deleted_ar": "تمت ازالتها",
+    "df_deleted_message_en": "removed from the saved flights",
+    "df_deleted_message_ar": "ازيلت من الرحلات المحفوظة"
   }.obs;
   static var lang = "en".obs;
   static var dirc = "ltr".obs;

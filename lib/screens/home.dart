@@ -177,6 +177,9 @@ class _HomeState extends State<Home> {
     return TabBarView(children: list);
   }
 }
-// make the api return data sperated by the day
+//X make the api return data sperated by the day
 //X fix the arabic and store it if it arabic get the arabic data
-// make the search page and the related api
+//X make the search page and the related api
+//Xcreate saved page
+//on long row press add it to the saved
+//on long press on the saved remove it from saved

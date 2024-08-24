@@ -11,6 +11,7 @@ void main() {
         primaryColor: Colors.white,
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.white54,
+          shape: CircleBorder(),
         ),
         tabBarTheme: const TabBarTheme(
             unselectedLabelColor: Colors.grey,

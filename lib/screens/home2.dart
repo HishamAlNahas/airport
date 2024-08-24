@@ -5,6 +5,7 @@ import 'package:airport/screens/saved_flights.dart';
 import 'package:airport/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
@@ -117,7 +118,18 @@ class _HomeState extends State<STable> {
                 child: TabBar(tabs: tabs))),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: bodies[selectedIndex],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              flightCard2(data: {
+                "normal_time": myPref("df_time"),
+                'country_name': myPref("df_country"),
+                "city_name": myPref("df_city"),
+                "status": myPref("df_status")
+              }),
+              Expanded(child: bodies[selectedIndex]),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
@@ -153,11 +165,12 @@ class _HomeState extends State<STable> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          mini: true,
           onPressed: () {
             Get.to(() => SavedFlights());
           },
           child: const Icon(
-            Icons.favorite,
+            Icons.bookmark_rounded,
             color: Colors.black,
           ),
         ),
@@ -191,8 +204,10 @@ class _HomeState extends State<STable> {
           return ListView.builder(
             itemBuilder: (context, index) {
               return flightCard2(
-                data: flights[index],
-              );
+                  data: flights[index],
+                  onLongPress: () {
+                    save(flights[index]);
+                  });
             },
             itemCount: flights.length,
           );
@@ -220,8 +235,10 @@ class _HomeState extends State<STable> {
           return ListView.builder(
             itemBuilder: (context, index) {
               return flightCard2(
-                data: flights[index],
-              );
+                  data: flights[index],
+                  onLongPress: () {
+                    save(flights[index]);
+                  });
             },
             itemCount: flights.length,
           );
@@ -231,36 +248,18 @@ class _HomeState extends State<STable> {
     return TabBarView(children: list);
   }
 
-  Widget flightCard2({var data}) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data["normal_time"]}")),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data['country_name']}")),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true), "${data["city_name"]}")),
-            // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
-            // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true), '${data["status"]}')),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data["estmtd_real_time"]}")),
-          ],
-        ),
-        const Divider(),
-      ],
-    );
+  void save(row) {
+    toast(
+        title: myPref("df_saved"),
+        message: myPref("df_saved_message"),
+        customColor: Colors.black);
+    List? res = GetStorage().read('savedFlights');
+    if (res == null) {
+      res = [row];
+    } else {
+      res.add(row);
+    }
+    GetStorage().write('savedFlights', res);
   }
 }
 // make the api return data sperated by the day

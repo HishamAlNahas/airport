@@ -189,9 +189,14 @@ colorStyle(
 SnackbarController toast(
     {String title = "title",
     String message = "message",
-    String status = "status"}) {
-  Color? color =
-      (status == "success") ? Colors.green[200] : Colors.redAccent[200];
+    String status = "status",
+    Color? customColor}) {
+  Color? color;
+  if (customColor == null) {
+    color = (status == "success") ? Colors.green[200] : Colors.redAccent[200];
+  } else {
+    color = customColor;
+  }
   return Get.snackbar(
     title,
     message,
@@ -232,4 +237,41 @@ Widget loginRequired() {
               }),
         ]),
       ));
+}
+
+Widget flightCard2({var data, Function? onLongPress}) {
+  return InkWell(
+    onLongPress: () {
+      onLongPress != null ? onLongPress() : null;
+    },
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data["normal_time"]}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data['country_name']}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true), "${data["city_name"]}")),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
+            Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true), '${data["status"]}')),
+            /*Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data["estmtd_real_time"]}")),*/
+          ],
+        ),
+        const Divider(),
+      ],
+    ),
+  );
 }
