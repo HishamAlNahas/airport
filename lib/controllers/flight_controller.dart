@@ -9,12 +9,12 @@ class FlightController extends GetxController {
   static var dates = [];
   static var isLoading = false.obs;
 
-  static load() async {
+  static load({String? searchText}) async {
     isLoading.value = true;
-    var departureResponse =
-        await fetch("$endPoint?action=select", {"type": "D", "lang": lang()});
-    var arrivalResponse =
-        await fetch("$endPoint?action=select", {"type": "A", "lang": lang()});
+    var departureResponse = await fetch("$endPoint?action=select",
+        {"type": "D", "lang": lang(), "searchText": searchText});
+    var arrivalResponse = await fetch("$endPoint?action=select",
+        {"type": "A", "lang": lang(), "searchText": searchText});
     isLoading.value = false;
     dates = await fetch("$endPoint?action=select", {"dates": "true"});
     if (departureResponse != null) {

@@ -41,82 +41,84 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       length: FlightController.dates.length,
       child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {},
+        appBar: AppBar(
+            backgroundColor: SettingsController.themeColor.withOpacity(0.7),
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                )),
+            title: Text(
+              myPref("df_flight_info"),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
+              IconButton(
+                  onPressed: () async {
+                    await SettingsController.changeLanguage();
+                    await refresh();
+                  },
                   icon: const Icon(
-                    Icons.search,
+                    Icons.language,
                     color: Colors.white,
-                  )),
-              title: Text(
-                myPref("df_flight_info"),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              ),
-              actions: [
-                IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
-                IconButton(
-                    onPressed: () async {
-                      await SettingsController.changeLanguage();
-                      await refresh();
-                    },
-                    icon: const Icon(
-                      Icons.language,
-                      color: Colors.white,
-                    ))
-              ],
-              bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 10),
-                  child: TabBar(tabs: tabs))),
-          body: bodies[selectedIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            elevation: 0,
-            backgroundColor: SettingsController.themeColor,
-            type: BottomNavigationBarType.fixed,
-            // Ensures all items are visible
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              selectedIndex = index;
-              setState(() {});
-            },
-            selectedItemColor: Colors.white,
-            // Highlighted tab color
-            unselectedItemColor: Colors.grey,
-            // Unselected tab color
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            // Bold text for selected item
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_land_rounded,
-                  size: 20,
-                ),
-                label: myPref('df_arrival'),
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_takeoff_rounded,
-                  size: 20,
-                ),
-                label: myPref('df_departure'),
-              ),
+                  ))
             ],
-          )),
-    );
-  }
+            bottom: PreferredSize(
+                preferredSize: const Size(double.infinity, 10),
+                child: TabBar(tabs: tabs))),
+        body: bodies[selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: SettingsController.themeColor,
+          type: BottomNavigationBarType.fixed,
+          // Ensures all items are visible
+          currentIndex: selectedIndex,
+          onTap: (index) {
+            selectedIndex = index;
 
-  Future<void> refresh() async {
-    await FlightController.load();
+            setState(() {});
+          },
+          selectedItemColor: Colors.white,
+          // Highlighted tab color
+          unselectedItemColor: Colors.grey,
+          // Unselected tab color
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          // Bold text for selected item
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.flight_land_rounded,
+                size: 20,
+              ),
+              label: myPref('df_arrival'),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.flight_takeoff_rounded,
+                size: 20,
+              ),
+              label: myPref('df_departure'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void startPeriodicFunction() {
     Timer.periodic(const Duration(minutes: 10), (timer) async {
-      await FlightController.load();
+      await refresh();
     });
+  }
+
+  Future<void> refresh() async {
+    await FlightController.load();
   }
 
   Widget arrival() {

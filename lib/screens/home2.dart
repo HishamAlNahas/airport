@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:airport/controllers/flight_controller.dart';
+import 'package:airport/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -81,7 +82,12 @@ class _HomeState extends State<STable> {
               backgroundColor: SettingsController.themeColor.withOpacity(0.7),
               centerTitle: true,
               leading: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => SearchDialog(),
+                    );
+                  },
                   icon: const Icon(
                     Icons.search,
                     color: Colors.white,
@@ -248,4 +254,4 @@ class _HomeState extends State<STable> {
 }
 // make the api return data sperated by the day
 //X fix the arabic and store it if it arabic get the arabic data
-// make the search page and the related api
+//X make the search page and the related api

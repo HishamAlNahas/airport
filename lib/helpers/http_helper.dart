@@ -31,7 +31,11 @@ class HttpHelper {
       if (responseBody is List) {
         return responseBody;
       }
-      if (responseBody["title"] != null) {
+      print(responseBody.runtimeType);
+      print(responseBody);
+      print("case");
+      if ((responseBody as Map).containsKey("title") &&
+          responseBody["title"] != null) {
         toast(
           title: responseBody["title"],
           message: responseBody["message"],
