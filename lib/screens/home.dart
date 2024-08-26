@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
                   color: Colors.white,
                 )),
             title: Text(
-              myPref("df_flight_info"),
+              df("df_flight_info"),
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 25,
@@ -96,14 +96,14 @@ class _HomeState extends State<Home> {
                 Icons.flight_land_rounded,
                 size: 20,
               ),
-              label: myPref('df_arrival'),
+              label: df('df_arrival'),
             ),
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.flight_takeoff_rounded,
                 size: 20,
               ),
-              label: myPref('df_departure'),
+              label: df('df_departure'),
             ),
           ],
         ),
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
 
         if (flights == null || flights.length == 0) {
           return Center(
-            child: Text(myPref("df_no_data")),
+            child: Text(df("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
         }
         if (flights == null || flights.length == 0) {
           return Center(
-            child: Text(myPref("df_no_data")),
+            child: Text(df("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -177,9 +177,3 @@ class _HomeState extends State<Home> {
     return TabBarView(children: list);
   }
 }
-//X make the api return data sperated by the day
-//X fix the arabic and store it if it arabic get the arabic data
-//X make the search page and the related api
-//Xcreate saved page
-//on long row press add it to the saved
-//on long press on the saved remove it from saved

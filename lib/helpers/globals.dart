@@ -8,15 +8,11 @@ import '../controllers/settings_controller.dart';
 import '../helpers/http_helper.dart';
 
 String df(String key) {
-  return SettingsController.languages["{$key}_{$lang()}"] ?? key;
+  return SettingsController.languages["${key}_${lang()}"] ?? key;
 }
 
 String pref(String key) {
   return SettingsController.preferences[key] ?? "";
-}
-
-String myPref(String key) {
-  return SettingsController.preferences["${key}_${lang()}"] ?? "err";
 }
 
 dynamic fetch(endPoint, [var body]) {

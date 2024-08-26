@@ -16,7 +16,7 @@ class SearchDialog extends StatelessWidget {
         onChanged: (val) {
           text = val;
         },
-        hintText: myPref("df_search_by_number_or_city"),
+        hintText: df("df_search_by_number_or_city"),
         trailing: [
           IconButton(
               onPressed: () {

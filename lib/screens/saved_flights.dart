@@ -1,8 +1,8 @@
 import 'package:airport/helpers/globals.dart';
-import 'package:airport/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../controllers/flight_controller.dart';
 import '../widgets/common.dart';
 
 class SavedFlights extends StatefulWidget {
@@ -13,11 +13,11 @@ class SavedFlights extends StatefulWidget {
 }
 
 class _SavedFlightsState extends State<SavedFlights> {
-  List? saved = GetStorage().read("savedFlights");
+  List? saved = GetStorage().read("saved_flights");
 
   @override
   Widget build(BuildContext context) {
-    List<Widget>? children;
+    /*List<Widget>? children;
     if (saved != null) {
       children = List.generate(
         saved!.length,
@@ -27,32 +27,56 @@ class _SavedFlightsState extends State<SavedFlights> {
               delete(index);
             }),
       );
+    }*/
+    List<Widget> data = [];
+    if (saved != null) {
+      for (int i = 0; i < saved!.length; i++) {
+        print(" saved![i]['flight_no'] ${saved![i]["flight_no"]}");
+        data.add(flightCard2(
+            data:
+                FlightController.getFlightOrDelete(id: saved![i]["flight_no"]),
+            onLongPress: () {
+              delete(i);
+            }));
+      }
     }
 
-    children ??= [
-      Center(
-        child: Text(myPref("df_no_data")),
-      )
-    ];
-    return scaffold(
-      appBarText: myPref("df_saved_flights"),
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        child: Column(
-          children: [
-            flightCard2(data: {
-              "normal_time": myPref("df_time"),
-              'country_name': myPref("df_country"),
-              "city_name": myPref("df_city"),
-              "status": myPref("df_status")
-            }),
-            Expanded(
-              child: ListView(
-                children: children,
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              opacity: 0.5,
+              image: AssetImage("assets/app/wallpaper.jpg"))),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black12,
+          title: Text(df("df_saved_flights")),
+          centerTitle: true,
+        ),
+        backgroundColor: Colors.black12,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          child: Column(
+            children: [
+              flightCard2(data: {
+                "normal_time": df("df_time"),
+                'city_name': df("df_city"),
+                "flight_no": df("df_flight_no"),
+                "status": df("df_status")
+              }),
+              Expanded(
+                child: ListView(
+                  children: saved != null
+                      ? data
+                      : [
+                          Center(
+                            child: Text(df("df_no_data")),
+                          )
+                        ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -60,8 +84,8 @@ class _SavedFlightsState extends State<SavedFlights> {
 
   void delete(index) {
     toast(
-        title: myPref("df_deleted"),
-        message: myPref("df_deleted_message"),
+        title: df("df_deleted"),
+        message: df("df_deleted_message"),
         customColor: Colors.black);
     saved!.removeAt(index);
     setState(() {});

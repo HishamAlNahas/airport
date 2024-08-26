@@ -240,6 +240,8 @@ Widget loginRequired() {
 }
 
 Widget flightCard2({var data, Function? onLongPress}) {
+  print(data);
+  print("ddaa");
   return InkWell(
     onLongPress: () {
       onLongPress != null ? onLongPress() : null;
@@ -251,26 +253,30 @@ Widget flightCard2({var data, Function? onLongPress}) {
             Expanded(
                 child: Text(
                     style: colorStyle(isSmall: true),
-                    "${data["normal_time"]}")),
+                    "${data?["normal_time"] ?? ""}")),
             Expanded(
                 child: Text(
                     style: colorStyle(isSmall: true),
-                    "${data['country_name']}")),
+                    "${data?['flight_no'] ?? ""}")),
             Expanded(
                 child: Text(
-                    style: colorStyle(isSmall: true), "${data["city_name"]}")),
+                    style: colorStyle(isSmall: true),
+                    "${data?["city_name"] ?? ""}")),
             // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
             // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
             Expanded(
                 child: Text(
-                    style: colorStyle(isSmall: true), '${data["status"]}')),
+                    style: colorStyle(isSmall: true),
+                    '${data?["status"] ?? ""}')),
             /*Expanded(
                 child: Text(
                     style: colorStyle(isSmall: true),
                     "${data["estmtd_real_time"]}")),*/
           ],
         ),
-        const Divider(),
+        const Divider(
+          color: Colors.white54,
+        ),
       ],
     ),
   );

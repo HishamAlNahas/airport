@@ -61,7 +61,7 @@ class _HomeState extends State<STable> {
   @override
   void initState() {
     super.initState();
-    startPeriodicFunction();
+    startPeriodicRefresh();
     bodies = [
       arrival(),
       departure(),
@@ -76,102 +76,110 @@ class _HomeState extends State<STable> {
     for (var date in FlightController.dates) {
       tabs.add(Text(date['STM_DATE']));
     }
-
-    return DefaultTabController(
-      length: FlightController.dates.length,
-      child: Scaffold(
-        appBar: AppBar(
-            backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-            centerTitle: true,
-            leading: IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => SearchDialog(),
-                  );
-                },
-                icon: const Icon(
-                  Icons.search,
-                  color: Colors.white,
-                )),
-            title: Text(
-              myPref("df_flight_info"),
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold),
-            ),
-            actions: [
-              IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
-              IconButton(
-                  onPressed: () async {
-                    await SettingsController.changeLanguage();
-                    await refresh();
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              opacity: 0.5,
+              image: AssetImage("assets/app/wallpaper.jpg"))),
+      child: DefaultTabController(
+        length: FlightController.dates.length,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+              //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
+              backgroundColor: Colors.black26,
+              centerTitle: true,
+              leading: IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => SearchDialog(),
+                    );
                   },
                   icon: const Icon(
-                    Icons.language,
+                    Icons.search,
                     color: Colors.white,
-                  ))
-            ],
-            bottom: PreferredSize(
-                preferredSize: const Size(double.infinity, 10),
-                child: TabBar(tabs: tabs))),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              flightCard2(data: {
-                "normal_time": myPref("df_time"),
-                'country_name': myPref("df_country"),
-                "city_name": myPref("df_city"),
-                "status": myPref("df_status")
-              }),
-              Expanded(child: bodies[selectedIndex]),
+                  )),
+              title: Text(
+                df("df_flight_info"),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+              actions: [
+                IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
+                IconButton(
+                    onPressed: () async {
+                      await SettingsController.changeLanguage();
+                      await refresh();
+                    },
+                    icon: const Icon(
+                      Icons.language,
+                      color: Colors.white,
+                    ))
+              ],
+              bottom: PreferredSize(
+                  preferredSize: const Size(double.infinity, 10),
+                  child: TabBar(tabs: tabs))),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                flightCard2(data: {
+                  "normal_time": df("df_time"),
+                  "flight_no": df("df_flight_no"),
+                  "city_name": df("df_city"),
+                  "status": df("df_status")
+                }),
+                Expanded(child: bodies[selectedIndex]),
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
+            backgroundColor: SettingsController.themeColor.withOpacity(0.6),
+            type: BottomNavigationBarType.fixed,
+            // Ensures all items are visible
+            currentIndex: selectedIndex,
+            onTap: (index) {
+              selectedIndex = index;
+              setState(() {});
+            },
+            selectedItemColor: Colors.white,
+            // Highlighted tab color
+            unselectedItemColor: Colors.grey,
+            // Unselected tab color
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            // Bold text for selected item
+            items: [
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.flight_land_rounded,
+                  size: 20,
+                ),
+                label: df('df_arrival'),
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.flight_takeoff_rounded,
+                  size: 20,
+                ),
+                label: df('df_departure'),
+              ),
             ],
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          backgroundColor: SettingsController.themeColor,
-          type: BottomNavigationBarType.fixed,
-// Ensures all items are visible
-          currentIndex: selectedIndex,
-          onTap: (index) {
-            selectedIndex = index;
-            setState(() {});
-          },
-          selectedItemColor: Colors.white,
-// Highlighted tab color
-          unselectedItemColor: Colors.grey,
-// Unselected tab color
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-// Bold text for selected item
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.flight_land_rounded,
-                size: 20,
-              ),
-              label: myPref('df_arrival'),
+          floatingActionButton: FloatingActionButton(
+            mini: true,
+            onPressed: () {
+              Get.to(() => SavedFlights());
+            },
+            child: const Icon(
+              Icons.bookmark_rounded,
+              color: Colors.black,
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.flight_takeoff_rounded,
-                size: 20,
-              ),
-              label: myPref('df_departure'),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          mini: true,
-          onPressed: () {
-            Get.to(() => SavedFlights());
-          },
-          child: const Icon(
-            Icons.bookmark_rounded,
-            color: Colors.black,
           ),
         ),
       ),
@@ -182,7 +190,7 @@ class _HomeState extends State<STable> {
     await FlightController.load();
   }
 
-  void startPeriodicFunction() {
+  void startPeriodicRefresh() {
     Timer.periodic(const Duration(minutes: 10), (timer) async {
       await FlightController.load();
     });
@@ -198,7 +206,7 @@ class _HomeState extends State<STable> {
 
         if (flights == null || flights.length == 0) {
           return Center(
-            child: Text(myPref("df_no_data")),
+            child: Text(df("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -222,14 +230,12 @@ class _HomeState extends State<STable> {
     for (int i = 0; i < FlightController.dates.length; i++) {
       var date = FlightController.dates[i]['STM_DATE'];
       list.add(Obx(() {
-        var flights;
         var departure = FlightController.departure.value;
-        if (departure.containsKey(date)) {
-          flights = departure?[date];
-        }
+        var flights = departure[date];
+
         if (flights == null || flights.length == 0) {
           return Center(
-            child: Text(myPref("df_no_data")),
+            child: Text(df("df_no_data")),
           );
         } else {
           return ListView.builder(
@@ -250,18 +256,24 @@ class _HomeState extends State<STable> {
 
   void save(row) {
     toast(
-        title: myPref("df_saved"),
-        message: myPref("df_saved_message"),
+        title: df("df_saved"),
+        message: df("df_saved_message"),
         customColor: Colors.black);
-    List? res = GetStorage().read('savedFlights');
-    if (res == null) {
+    List? res = GetStorage().read('saved_flights');
+    if (res == null || res.isEmpty) {
       res = [row];
     } else {
+      // var found = res.where(
+      //   (element) => element['flight_no'] == row['flight_no'],
+      // );
+      // if (found.isEmpty) {
       res.add(row);
+      // }
+      print("rrrrrrrrrrrrrrrr ${res}");
     }
-    GetStorage().write('savedFlights', res);
+    print("res.length== ${res.length}");
+    GetStorage().write('saved_flights', res);
   }
 }
-// make the api return data sperated by the day
-//X fix the arabic and store it if it arabic get the arabic data
-//X make the search page and the related api
+
+//color the saved with lighter color

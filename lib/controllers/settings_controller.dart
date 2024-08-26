@@ -11,39 +11,8 @@ class SettingsController extends GetxController {
   static String siteUrl = "http://192.168.1.170:2039/";
   static String localSiteUrl = "http://192.168.1.170:2039/";
   static var languages = {
-    "df_home_en": "Home",
-    "df_home_ar": "الرئيسية",
-    "df_flight_info_en": "Flight Info",
-    "df_flight_info_ar": "حركة الطائرات",
-    "df_arrival_en": "Arrival",
-    "df_arrival_ar": "الوصول",
-    "df_departure_en": "Departure",
-    "df_departure_ar": "المغادرة",
-    "df_airline_en": "Airline",
-    "df_airline_ar": "الخطوط الجوية",
-    "df_time_en": "Time",
-    "df_time_ar": "الوقت",
-    "df_to_en": "To",
-    "df_to_ar": "الى",
-    "df_from_en": "From",
-    "df_from_ar": "من",
-    "df_city_en": "City",
-    "df_city_ar": "المدينة",
-    "df_via_en": "Via",
-    "df_via_ar": "عبر",
-    "df_counter_en": "Counter",
-    "df_counter_ar": "كاونتر",
-    "df_status_en": "Status",
-    "df_status_ar": "الحالة",
-    "df_real_en": "Real Time",
-    "df_real_ar": "الوقت الحقيقي",
-    "df_search_by_number_or_city_en": "Search by flight number or city name",
-    "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
-    "df_no_data_en": "No Data",
-    "df_no_data_ar": "لا يجود معلومات"
-  }.obs;
-  //لإ×]× remove them from the preferneces  TODO
-  static var preferences = {
+    "df_slogan_en": "Beirut - Rafic Hariri International Airport ",
+    "df_slogan_ar": "مطار رفيق الحريري الدولي - بيروت",
     "df_home_en": "Home",
     "df_home_ar": "الرئيسية",
     "df_flight_info_en": "Flight Info",
@@ -70,6 +39,8 @@ class SettingsController extends GetxController {
     "df_counter_ar": "كاونتر",
     "df_status_en": "Status",
     "df_status_ar": "الحالة",
+    "df_flight_no_en": "Flight No",
+    "df_flight_no_ar": "رقم الرحلة",
     "df_real_en": "Real Time",
     "df_real_ar": "الوقت الحقيقي",
     "df_search_by_number_or_city_en": "Search by flight number or city name",
@@ -85,8 +56,10 @@ class SettingsController extends GetxController {
     "df_deleted_en": "deleted",
     "df_deleted_ar": "تمت ازالتها",
     "df_deleted_message_en": "removed from the saved flights",
-    "df_deleted_message_ar": "ازيلت من الرحلات المحفوظة"
+    "df_deleted_message_ar": "ازيلت من الرحلات المحفوظة",
   }.obs;
+
+  static var preferences = {}.obs;
   static var lang = "en".obs;
   static var dirc = "ltr".obs;
   static var isLoading = false.obs;
@@ -110,7 +83,7 @@ class SettingsController extends GetxController {
 
     if (response.isNotEmpty) {
       Cache.set(Cache.settings, response);
-      languages.value = response["languages"];
+      //languages.value = response["languages"];
       // preferences.value = response["preferences"];
       setLocale(response["lang"]);
     }

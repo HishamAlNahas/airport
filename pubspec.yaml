@@ -86,9 +86,7 @@ flutter:
   fonts:
     - family: Dubai
       fonts:
-         - asset: assets/fonts/DubaiW23-Regular.ttf
-         - asset: assets/fonts/DubaiW23-Bold.ttf
-           weight: 700
+         - asset: assets/fonts/DroidArabicKufi.ttf
   #  - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

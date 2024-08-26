@@ -82,14 +82,14 @@ class FlightCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data["city_name"] ?? myPref("df_err"),
+                    data["city_name"] ?? df("df_err"),
                     style: colorStyle(isBold: true),
                   ),
                   Text(
-                    data["status"] ?? myPref("df_err"),
+                    data["status"] ?? df("df_err"),
                     style: colorStyle(isBold: true),
                   ),
-                  Text(data["estmtd_real_time"] ?? myPref("df_err"),
+                  Text(data["estmtd_real_time"] ?? df("df_err"),
                       style: colorStyle(isBold: true)),
                 ],
               ),

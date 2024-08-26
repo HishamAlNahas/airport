@@ -17,30 +17,29 @@ class FlightPage extends StatelessWidget {
         child: ListView(
           children: [
             buildFlightDetailCard(
-                myPref("df_airline"), Icons.airplanemode_active, "TODO"),
+                df("df_airline"), Icons.airplanemode_active, "TODO"),
             buildFlightDetailCard(
-              myPref("df_time"),
+              df("df_time"),
               Icons.access_time,
               data["normal_time"],
             ),
             buildFlightDetailCard(
-              data['TYP'] == "A" ? myPref("df_from") : myPref("df_to"),
+              data['TYP'] == "A" ? df("df_from") : df("df_to"),
               Icons.flight_takeoff,
               "${data['country_name']}",
             ),
             buildFlightDetailCard(
-              myPref("df_city"),
+              df("df_city"),
               Icons.location_city,
               data["city_name"],
             ),
             buildFlightDetailCard(
-                myPref("df_via"), Icons.transfer_within_a_station, data["VIA"]),
+                df("df_via"), Icons.transfer_within_a_station, data["VIA"]),
             buildFlightDetailCard(
-                myPref("df_counter"), Icons.countertops, "${data['_path']}"),
+                df("df_counter"), Icons.countertops, "${data['_path']}"),
+            buildFlightDetailCard(df("df_status"), Icons.info, data["status"]),
             buildFlightDetailCard(
-                myPref("df_status"), Icons.info, data["status"]),
-            buildFlightDetailCard(
-                myPref("df_real"), Icons.schedule, data["estmtd_real_time"]),
+                df("df_real"), Icons.schedule, data["estmtd_real_time"]),
           ],
         ),
       ),
