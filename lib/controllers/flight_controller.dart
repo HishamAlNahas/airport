@@ -7,7 +7,7 @@ class FlightController extends GetxController {
   static String endPoint = "flight_api.php";
   static var departure = {}.obs;
   static var arrival = {}.obs;
-  static var dates = [];
+  static List dates = [];
   static var isLoading = false.obs;
 
   static load({String? searchText}) async {
@@ -17,13 +17,13 @@ class FlightController extends GetxController {
     var arrivalResponse = await fetch("$endPoint?action=select",
         {"type": "A", "lang": lang(), "searchText": searchText});
     isLoading.value = false;
-    dates = await fetch("$endPoint?action=select", {"dates": "true"});
-    if (departureResponse != null || true) {
+    dates = await fetch("$endPoint?action=select", {"dates": "true"}) ?? [];
+    if (departureResponse != null) {
       departure.value.clear();
       departure.assignAll(departureResponse);
     }
 
-    if (arrivalResponse != null || true) {
+    if (arrivalResponse != null) {
       arrival.value.clear();
       arrival.assignAll(arrivalResponse);
     }
@@ -110,8 +110,6 @@ class FlightController extends GetxController {
 
     data.addAll(explodeList(departure.value.values.toList()));
     data.addAll(explodeList(arrival.value.values.toList()));
-
-    print(departure.value.values);
     var res = data
         .where(
           (element) => element['flight_no'] == id,
@@ -127,5 +125,38 @@ class FlightController extends GetxController {
       );
       GetStorage().write("saved_flights", saved);
     }
+  }
+
+  static delete(String id) async {
+    List? saved = GetStorage().read("saved_flights");
+    // toast(
+    //     title: df("df_deleted"),
+    //     message: df("df_deleted_message"),
+    //     customColor: Colors.black);
+    saved!.removeWhere(
+      (element) => element['flight_no'] == id,
+    );
+    GetStorage().write("saved_flights", saved);
+    await load();
+  }
+
+  static save(row) async {
+    // toast(
+    //     title: df("df_saved"),
+    //     message: df("df_saved_message"),
+    //     customColor: Colors.black);
+    List? res = GetStorage().read('saved_flights');
+    if (res == null || res.isEmpty) {
+      res = [row];
+    } else {
+      var found = res.where(
+        (element) => element['flight_no'] == row['flight_no'],
+      );
+      if (found.isEmpty) {
+        res.add(row);
+      }
+    }
+    GetStorage().write('saved_flights', res);
+    await load();
   }
 }

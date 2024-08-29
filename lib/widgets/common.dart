@@ -239,40 +239,67 @@ Widget loginRequired() {
       ));
 }
 
-Widget flightCard2({var data, Function? onLongPress}) {
-  print(data);
-  print("ddaa");
+Widget flightCard2(
+    {var data, Function? onLongPress, bool isBold = false, Color? background}) {
   return InkWell(
     onLongPress: () {
       onLongPress != null ? onLongPress() : null;
     },
     child: Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data?["normal_time"] ?? ""}")),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data?['flight_no'] ?? ""}")),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data?["city_name"] ?? ""}")),
-            // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
-            // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
-            Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    '${data?["status"] ?? ""}')),
-            /*Expanded(
-                child: Text(
-                    style: colorStyle(isSmall: true),
-                    "${data["estmtd_real_time"]}")),*/
-          ],
+        Container(
+          color: background,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 50,
+                child:
+                    data['company_logo'] != null && data['company_logo'] != ""
+                        ? Image.network(
+                            data['company_logo'],
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return const SizedBox();
+                            },
+                          )
+                        : null,
+              ),
+              Expanded(
+                  child: Text(
+                      style: colorStyle(
+                          isSmall: true,
+                          isBold: true,
+                          color: isBold ? Colors.yellowAccent : Colors.white70),
+                      "${data?['flight_no'] ?? ""}")),
+              Expanded(
+                  child: Text(
+                      style: colorStyle(
+                          isSmall: true,
+                          isBold: true,
+                          color: isBold ? Colors.yellowAccent : Colors.white70),
+                      "${data?["normal_time"] ?? ""}")),
+              Expanded(
+                  child: Text(
+                      style: colorStyle(
+                          isSmall: true,
+                          isBold: true,
+                          color: isBold ? Colors.yellowAccent : Colors.white70),
+                      "${data?["city_name"] ?? ""}")),
+              // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
+              // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
+              Expanded(
+                  child: Text(
+                      style: colorStyle(
+                          isSmall: true,
+                          isBold: true,
+                          color: isBold ? Colors.yellowAccent : Colors.white70),
+                      '${data?["status"] ?? ""}')),
+              /*Expanded(
+                  child: Text(
+                      style: colorStyle(isSmall: true),
+                      "${data["estmtd_real_time"]}")),*/
+            ],
+          ),
         ),
         const Divider(
           color: Colors.white54,
@@ -280,4 +307,13 @@ Widget flightCard2({var data, Function? onLongPress}) {
       ],
     ),
   );
+}
+
+Widget tableHeader() {
+  return flightCard2(data: {
+    "normal_time": df("df_time"),
+    "flight_no": df("df_flight_no"),
+    "city_name": df("df_city"),
+    "status": df("df_status")
+  }, isBold: true);
 }

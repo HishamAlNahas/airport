@@ -11,6 +11,12 @@ class SettingsController extends GetxController {
   static String siteUrl = "http://192.168.1.170:2039/";
   static String localSiteUrl = "http://192.168.1.170:2039/";
   static var languages = {
+    "df_title_en": "Beirut - Rafic Hariri",
+    "df_title_ar": "مطار رفيق الحريري",
+    "df_subtitle_en": "International Airport",
+    "df_subtitle_ar": "الدولي بيروت",
+    "df_usage_en": "Long Press on a flight to save it",
+    "df_usage_ar": "اضغط مطولا على اي رحلة لاضافتها",
     "df_slogan_en": "Beirut - Rafic Hariri International Airport ",
     "df_slogan_ar": "مطار رفيق الحريري الدولي - بيروت",
     "df_home_en": "Home",

@@ -11,42 +11,6 @@ import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
 import '../widgets/common.dart';
 
-/*class STable extends StatelessWidget {
-  const STable({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return scaffold(
-        backgroundColor: Colors.black,
-        appBarText: "dd",
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Table(
-                border: TableBorder.all(color: Colors.white24),
-                children: List.generate(
-                    FlightController.departure.value['2024-08-22'].length,
-                        (index) => fn(FlightController.departure.value['2024-08-22']
-                    [index]))),
-          ),
-        ));
-  }
-
-  fn(Map data) {
-    return TableRow(
-      children: [
-        Text(style: colorStyle(isSmall: true), data["normal_time"]),
-        Text(style: colorStyle(isSmall: true), data['country_name']),
-        Text(style: colorStyle(isSmall: true), data["city_name"]),
-        //Text(style: colorStyle(isSmall: true), data["VIA"]),
-        //Text(style: colorStyle(isSmall: true), data['_path']),
-        Text(style: colorStyle(isSmall: true), data["status"]),
-        Text(style: colorStyle(isSmall: true), data["estmtd_real_time"]),
-      ],
-    );
-  }
-}*/
-
 class STable extends StatefulWidget {
   const STable({super.key});
 
@@ -101,12 +65,41 @@ class _HomeState extends State<STable> {
                     Icons.search,
                     color: Colors.white,
                   )),
-              title: Text(
-                df("df_flight_info"),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    "assets/app/logo.png",
+                    width: 45,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          df("df_title"),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      FittedBox(
+                        child: Text(
+                          df("df_subtitle"),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
               actions: [
                 IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
@@ -121,19 +114,14 @@ class _HomeState extends State<STable> {
                     ))
               ],
               bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 10),
+                  preferredSize: const Size(double.infinity, 30),
                   child: TabBar(tabs: tabs))),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                flightCard2(data: {
-                  "normal_time": df("df_time"),
-                  "flight_no": df("df_flight_no"),
-                  "city_name": df("df_city"),
-                  "status": df("df_status")
-                }),
+                tableHeader(),
                 Expanded(child: bodies[selectedIndex]),
               ],
             ),
@@ -197,50 +185,41 @@ class _HomeState extends State<STable> {
   }
 
   Widget arrival() {
-    List<Widget> list = [];
-    for (int i = 0; i < FlightController.dates.length; i++) {
-      var date = FlightController.dates[i]['STM_DATE'];
-      list.add(Obx(() {
-        var arrival = FlightController.arrival.value;
-        var flights = arrival[date];
-
-        if (flights == null || flights.length == 0) {
-          return Center(
-            child: Text(df("df_no_data")),
-          );
-        } else {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return flightCard2(
-                  data: flights[index],
-                  onLongPress: () {
-                    save(flights[index]);
-                  });
-            },
-            itemCount: flights.length,
-          );
-        }
-      }));
-    }
-    return TabBarView(children: list);
+    return Obx(() => flightsList(FlightController.arrival.value));
   }
 
   Widget departure() {
-    List<Widget> list = [];
+    return Obx(() => flightsList(FlightController.departure.value));
+  }
+
+  flightsList(data) {
+    /*List<Widget> list = [];
     for (int i = 0; i < FlightController.dates.length; i++) {
       var date = FlightController.dates[i]['STM_DATE'];
       list.add(Obx(() {
-        var departure = FlightController.departure.value;
-        var flights = departure[date];
+        var flightsPerDay = flights[date];
 
-        if (flights == null || flights.length == 0) {
+        if (flightsPerDay == null || flightsPerDay.length == 0) {
           return Center(
             child: Text(df("df_no_data")),
           );
         } else {
           return ListView.builder(
             itemBuilder: (context, index) {
+              Color? bg;
+              /*List? saved = GetStorage().read('saved_flights');
+              List<String> flights_no = [];
+              for (var flight in saved ?? []) {
+                flights_no.add(flight['flight_no']);
+              }
+              if (flights_no.contains(flightsPerDay[index]['flight_no'])) {
+                bg = Colors.yellow.shade100;
+              } else {
+                bg = null;
+              }*/
+
               return flightCard2(
+                  background: bg,
                   data: flights[index],
                   onLongPress: () {
                     save(flights[index]);
@@ -251,28 +230,46 @@ class _HomeState extends State<STable> {
         }
       }));
     }
-    return TabBarView(children: list);
-  }
+    return TabBarView(children: list);*/
 
-  void save(row) {
-    toast(
-        title: df("df_saved"),
-        message: df("df_saved_message"),
-        customColor: Colors.black);
-    List? res = GetStorage().read('saved_flights');
-    if (res == null || res.isEmpty) {
-      res = [row];
-    } else {
-      // var found = res.where(
-      //   (element) => element['flight_no'] == row['flight_no'],
-      // );
-      // if (found.isEmpty) {
-      res.add(row);
-      // }
-      print("rrrrrrrrrrrrrrrr ${res}");
+    List<Widget> list = [];
+    for (int i = 0; i < FlightController.dates.length; i++) {
+      var date = FlightController.dates[i]['STM_DATE'];
+      var flights = data[date];
+      Widget listItem;
+      if (flights == null || flights.length == 0) {
+        listItem = Center(
+          child: Text(df("df_no_data")),
+        );
+      } else {
+        listItem = ListView.builder(
+          itemBuilder: (context, index) {
+            Color? background;
+            List? saved = GetStorage().read('saved_flights');
+            List<String> flightsNo = [];
+            for (var flight in saved ?? []) {
+              flightsNo.add(flight['flight_no']);
+            }
+            if (flightsNo.contains(flights[index]['flight_no'])) {
+              background = Colors.red.withOpacity(0.1);
+            } else {
+              background = null;
+            }
+            return flightCard2(
+                background: background,
+                data: flights[index],
+                onLongPress: () {
+                  background == null
+                      ? FlightController.save(flights[index])
+                      : FlightController.delete(flights[index]['flight_no']);
+                });
+          },
+          itemCount: flights.length,
+        );
+      }
+      list.add(listItem);
     }
-    print("res.length== ${res.length}");
-    GetStorage().write('saved_flights', res);
+    return TabBarView(children: list);
   }
 }
 

@@ -31,12 +31,12 @@ class _SavedFlightsState extends State<SavedFlights> {
     List<Widget> data = [];
     if (saved != null) {
       for (int i = 0; i < saved!.length; i++) {
-        print(" saved![i]['flight_no'] ${saved![i]["flight_no"]}");
         data.add(flightCard2(
             data:
                 FlightController.getFlightOrDelete(id: saved![i]["flight_no"]),
-            onLongPress: () {
-              delete(i);
+            onLongPress: () async {
+              await FlightController.delete(saved![i]["flight_no"]);
+              setState(() {});
             }));
       }
     }
@@ -58,19 +58,14 @@ class _SavedFlightsState extends State<SavedFlights> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-              flightCard2(data: {
-                "normal_time": df("df_time"),
-                'city_name': df("df_city"),
-                "flight_no": df("df_flight_no"),
-                "status": df("df_status")
-              }),
+              tableHeader(),
               Expanded(
                 child: ListView(
-                  children: saved != null
+                  children: saved != null && saved!.isNotEmpty
                       ? data
                       : [
                           Center(
-                            child: Text(df("df_no_data")),
+                            child: Text(df("df_usage")),
                           )
                         ],
                 ),
@@ -80,14 +75,5 @@ class _SavedFlightsState extends State<SavedFlights> {
         ),
       ),
     );
-  }
-
-  void delete(index) {
-    toast(
-        title: df("df_deleted"),
-        message: df("df_deleted_message"),
-        customColor: Colors.black);
-    saved!.removeAt(index);
-    setState(() {});
   }
 }
