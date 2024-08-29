@@ -4,9 +4,6 @@ import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
 import '../helpers/validator.dart';
-import '../screens/auth/login.dart';
-import '../screens/auth/register.dart';
-import 'scaffold.dart';
 
 BoxDecoration boxDecoration({
   Color color = Colors.transparent,
@@ -203,40 +200,6 @@ SnackbarController toast(
     backgroundColor: color,
     colorText: Colors.white,
   );
-}
-
-Widget authRequired(Widget layout) {
-  return (!isAuth()) ? loginRequired() : layout;
-}
-
-Widget loginRequired() {
-  return scaffold(
-      appBarText: df("df_auth_required"),
-      body: Container(
-        padding: const EdgeInsets.all(12),
-        child: Column(children: [
-          br(50),
-          Image.asset('assets/images/login.png'),
-          br(20),
-          Text(df("df_user_auth_required")),
-          br(20),
-          button(
-              text: "Login",
-              color: Colors.blueGrey,
-              onPressed: () {
-                Get.to(() => Login(), transition: appTransition());
-              }),
-          br(20),
-          button(
-              text: "Register",
-              color: Colors.white,
-              textColor: Colors.blueGrey,
-              borderColor: Colors.blueGrey,
-              onPressed: () {
-                Get.to(() => const Register(), transition: appTransition());
-              }),
-        ]),
-      ));
 }
 
 Widget flightCard2(

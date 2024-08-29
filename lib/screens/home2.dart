@@ -308,29 +308,32 @@ class _HomeState extends State<STable> {
           child: Text(df("df_no_data")),
         );
       } else {
-        listItem = ListView.builder(
-          itemBuilder: (context, index) {
-            Color? background;
-            List? saved = GetStorage().read('saved_flights');
-            List<String> flightsNo = [];
-            for (var flight in saved ?? []) {
-              flightsNo.add(flight['flight_no']);
-            }
-            if (flightsNo.contains(flights[index]['flight_no'])) {
-              background = Colors.red.withOpacity(0.1);
-            } else {
-              background = null;
-            }
-            return flightCard2(
-                background: background,
-                data: flights[index],
-                onLongPress: () {
-                  background == null
-                      ? FlightController.save(flights[index])
-                      : FlightController.delete(flights[index]['flight_no']);
-                });
-          },
-          itemCount: flights.length,
+        listItem = RefreshIndicator(
+          onRefresh: () => FlightController.load(),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              Color? background;
+              List? saved = GetStorage().read('saved_flights');
+              List<String> flightsNo = [];
+              for (var flight in saved ?? []) {
+                flightsNo.add(flight['flight_no']);
+              }
+              if (flightsNo.contains(flights[index]['flight_no'])) {
+                background = Colors.red.withOpacity(0.1);
+              } else {
+                background = null;
+              }
+              return flightCard2(
+                  background: background,
+                  data: flights[index],
+                  onLongPress: () {
+                    background == null
+                        ? FlightController.save(flights[index])
+                        : FlightController.delete(flights[index]['flight_no']);
+                  });
+            },
+            itemCount: flights.length,
+          ),
         );
       }
       list.add(listItem);

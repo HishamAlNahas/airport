@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../controllers/auth_controller.dart';
 import '../controllers/settings_controller.dart';
 import '../helpers/http_helper.dart';
 
@@ -64,14 +63,6 @@ Map<String, dynamic> textEditingControllerData(textEditingController) {
     data[field] = textEditer.text.trim();
   });
   return data;
-}
-
-auth(String key, [String defaultValue = ""]) {
-  return AuthController.member[key] ?? defaultValue;
-}
-
-isAuth() {
-  return auth("cp__member_id").toString().isNotEmpty;
 }
 
 parr(var data) {
