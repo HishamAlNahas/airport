@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 import '../helpers/globals.dart';
 
@@ -7,7 +8,13 @@ class FlightController extends GetxController {
   static String endPoint = "flight_api.php";
   static var departure = {}.obs;
   static var arrival = {}.obs;
-  static List dates = [];
+  static List dates = [
+    {'STM_DATE': DateFormat("yyyy-MM-dd").format(DateTime.now())},
+    {
+      'STM_DATE': DateFormat("yyyy-MM-dd")
+          .format(DateTime.now().add(const Duration(days: 1)))
+    }
+  ];
   static var isLoading = false.obs;
 
   static load({String? searchText}) async {
@@ -17,13 +24,23 @@ class FlightController extends GetxController {
     var arrivalResponse = await fetch("$endPoint?action=select",
         {"type": "A", "lang": lang(), "searchText": searchText});
     isLoading.value = false;
-    dates = await fetch("$endPoint?action=select", {"dates": "true"}) ?? [];
+    //dates = await fetch("$endPoint?action=select", {"dates": "true"}) ?? [];
     if (departureResponse != null) {
+      /*if (departureResponse is Map) {
+        for (var key in departureResponse.keys) {
+          dates.add({'STM_DATE': key});
+        }
+      }*/
       departure.value.clear();
       departure.assignAll(departureResponse);
     }
 
     if (arrivalResponse != null) {
+      /*if (dates.length > 2 && arrivalResponse is Map) {
+        for (var key in arrivalResponse.keys) {
+          dates.add({'STM_DATE': key});
+        }
+      }*/
       arrival.value.clear();
       arrival.assignAll(arrivalResponse);
     }

@@ -52,19 +52,7 @@ class _HomeState extends State<STable> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
               //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-              backgroundColor: Colors.black26,
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => SearchDialog(),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  )),
+              backgroundColor: Colors.white,
               title: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -83,7 +71,7 @@ class _HomeState extends State<STable> {
                         child: Text(
                           df("df_title"),
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 12,
                               fontWeight: FontWeight.bold),
                         ),
@@ -92,7 +80,7 @@ class _HomeState extends State<STable> {
                         child: Text(
                           df("df_subtitle"),
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 12,
                               fontWeight: FontWeight.bold),
                         ),
@@ -102,7 +90,12 @@ class _HomeState extends State<STable> {
                 ],
               ),
               actions: [
-                IconButton(onPressed: refresh, icon: const Icon(Icons.refresh)),
+                IconButton(
+                    onPressed: refresh,
+                    icon: const Icon(
+                      Icons.refresh,
+                      color: Colors.black,
+                    )),
                 IconButton(
                     onPressed: () async {
                       await SettingsController.changeLanguage();
@@ -110,12 +103,81 @@ class _HomeState extends State<STable> {
                     },
                     icon: const Icon(
                       Icons.language,
-                      color: Colors.white,
-                    ))
+                      color: Colors.black,
+                    )),
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => SearchDialog(),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    )),
               ],
               bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 30),
-                  child: TabBar(tabs: tabs))),
+                  preferredSize: const Size(double.infinity, 65),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              selectedIndex = 0;
+                              setState(() {});
+                            },
+                            style: ButtonStyle(
+                                side: WidgetStatePropertyAll(selectedIndex == 0
+                                    ? const BorderSide(color: Colors.black)
+                                    : null),
+                                foregroundColor: selectedIndex == 0
+                                    ? null
+                                    : const WidgetStatePropertyAll(
+                                        Colors.grey)),
+                            child: Row(
+                              children: [
+                                Text(df('df_arrival')),
+                                const Icon(
+                                  Icons.flight_land_rounded,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                          OutlinedButton(
+                            style: ButtonStyle(
+                                side: WidgetStatePropertyAll(selectedIndex == 1
+                                    ? const BorderSide(color: Colors.black)
+                                    : null),
+                                foregroundColor: selectedIndex == 1
+                                    ? null
+                                    : const WidgetStatePropertyAll(
+                                        Colors.grey)),
+                            onPressed: () {
+                              selectedIndex = 1;
+                              setState(() {});
+                            },
+                            child: Row(
+                              children: [
+                                Text(df('df_departure')),
+                                const Icon(
+                                  Icons.flight_takeoff_rounded,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TabBar(tabs: tabs),
+                    ],
+                  ))),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -126,7 +188,7 @@ class _HomeState extends State<STable> {
               ],
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
+          /*bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             backgroundColor: SettingsController.themeColor.withOpacity(0.6),
             type: BottomNavigationBarType.fixed,
@@ -158,7 +220,7 @@ class _HomeState extends State<STable> {
                 label: df('df_departure'),
               ),
             ],
-          ),
+          ),*/
           floatingActionButton: FloatingActionButton(
             mini: true,
             onPressed: () {
@@ -175,7 +237,11 @@ class _HomeState extends State<STable> {
   }
 
   Future<void> refresh() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
     await FlightController.load();
+    Navigator.pop(context);
   }
 
   void startPeriodicRefresh() {

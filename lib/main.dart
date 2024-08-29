@@ -8,15 +8,21 @@ void main() {
     darkTheme: ThemeData(
         textTheme: _buildTextTheme(ThemeData.dark().textTheme, Colors.black),
         fontFamily: "Dubai",
+        outlinedButtonTheme: const OutlinedButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(Colors.black),
+            side: WidgetStatePropertyAll(BorderSide(color: Colors.grey)),
+          ),
+        ),
         primaryColor: Colors.white,
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.white54,
           shape: CircleBorder(),
         ),
         tabBarTheme: const TabBarTheme(
-            unselectedLabelColor: Colors.grey,
-            labelColor: Colors.white,
-            indicatorColor: Colors.white,
+            unselectedLabelColor: Colors.black54,
+            labelColor: Colors.black,
+            indicatorColor: Colors.black,
             dividerColor: Colors.transparent),
         useMaterial3: true,
         brightness: Brightness.dark),

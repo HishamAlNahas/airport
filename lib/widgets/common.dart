@@ -264,6 +264,9 @@ Widget flightCard2(
                           )
                         : null,
               ),
+              const SizedBox(
+                width: 5,
+              ),
               Expanded(
                   child: Text(
                       style: colorStyle(
