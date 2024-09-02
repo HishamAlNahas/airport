@@ -175,7 +175,9 @@ class _HomeState extends State<STable> {
                       const SizedBox(
                         height: 5,
                       ),
-                      TabBar(tabs: tabs),
+                      TabBar(
+                        tabs: tabs,
+                      ),
                     ],
                   ))),
           body: Padding(

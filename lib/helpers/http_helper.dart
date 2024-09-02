@@ -27,7 +27,7 @@ class HttpHelper {
     parr("RESPONSE BODY: ${response.body.toString()}");
 
     if (!response.status.hasError) {
-      var responseBody = jsonDecode(response.body);
+      var responseBody = jsonDecode(response?.body ?? "{}");
       if (responseBody is List) {
         return responseBody;
       }

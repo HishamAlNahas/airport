@@ -5,64 +5,37 @@ import 'package:get_storage/get_storage.dart';
 import '../helpers/cache.dart';
 import '../helpers/constant_keys.dart';
 import '../helpers/globals.dart';
+import 'flight_controller.dart';
 
 class SettingsController extends GetxController {
-  static String endPoint = "settings_api.php";
+  static String endPoint = FlightController.endPoint;
   static String siteUrl = "https://beirutairport.gov.lb/";
   static String localSiteUrl = "https://beirutairport.gov.lb/";
-  static var languages = {
+  static var languages = <String, dynamic>{
     "df_title_en": "Beirut - Rafic Hariri",
     "df_title_ar": "مطار رفيق الحريري",
     "df_subtitle_en": "International Airport",
     "df_subtitle_ar": "الدولي بيروت",
-    "df_usage_en": "Long Press on a flight to save it",
-    "df_usage_ar": "اضغط مطولا على اي رحلة لاضافتها",
-    "df_slogan_en": "Beirut - Rafic Hariri International Airport ",
-    "df_slogan_ar": "مطار رفيق الحريري الدولي - بيروت",
-    "df_home_en": "Home",
-    "df_home_ar": "الرئيسية",
-    "df_flight_info_en": "Flight Info",
-    "df_flight_info_ar": "حركة الطائرات",
+    /*"df_usage_en": "Long Press on a flight to follow it",
+    "df_usage_ar": "اضغط مطولا على اي رحلة لمتابعتها",
     "df_arrival_en": "Arrival",
     "df_arrival_ar": "الوصول",
     "df_departure_en": "Departure",
     "df_departure_ar": "المغادرة",
-    "df_airline_en": "Airline",
-    "df_airline_ar": "الخطوط الجوية",
     "df_time_en": "Time",
     "df_time_ar": "الوقت",
-    "df_to_en": "To",
-    "df_to_ar": "الى",
-    "df_from_en": "From",
-    "df_from_ar": "من",
     "df_city_en": "City",
     "df_city_ar": "المدينة",
-    "df_country_en": "Country",
-    "df_country_ar": "الدولة",
-    "df_via_en": "Via",
-    "df_via_ar": "عبر",
-    "df_counter_en": "Counter",
-    "df_counter_ar": "كاونتر",
     "df_status_en": "Status",
     "df_status_ar": "الحالة",
     "df_flight_no_en": "Flight No",
     "df_flight_no_ar": "رقم الرحلة",
-    "df_real_en": "Real Time",
-    "df_real_ar": "الوقت الحقيقي",
     "df_search_by_number_or_city_en": "Search by flight number or city name",
     "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
     "df_no_data_en": "No Data",
     "df_no_data_ar": "لا يجود معلومات",
     "df_saved_flights_en": "Saved Flights",
-    "df_saved_flights_ar": "الرحلات المحفوظة",
-    "df_saved_en": "Saved",
-    "df_saved_ar": "تم حفظها",
-    "df_saved_message_en": "added to the saved flights",
-    "df_saved_message_ar": "تم اضافتها لصفحة الرحلات المحفوظة",
-    "df_deleted_en": "deleted",
-    "df_deleted_ar": "تمت ازالتها",
-    "df_deleted_message_en": "removed from the saved flights",
-    "df_deleted_message_ar": "ازيلت من الرحلات المحفوظة",
+    "df_saved_flights_ar": "الرحلات المحفوظة",*/
   }.obs;
 
   static var preferences = {}.obs;
@@ -74,16 +47,19 @@ class SettingsController extends GetxController {
 
   static load() async {
     var response = {};
-
+    var def = await fetch("$endPoint?action=select_def");
+    print(def.runtimeType);
     if (Cache.has(Cache.settings)) {
       response = Cache.get(Cache.settings);
     } else {
       isLoading.value = true;
       //response = await fetch("$endPoint?action=select");
-      response = {
-        "languages": {"ar": "ar", "en": "en"},
-        "lang": "en"
-      };
+      response = {"lang": "en"};
+      var def = await fetch("$endPoint?action=select_def");
+      if (def != null) {
+        languages.assignAll(def);
+        response.addAll({"languages": def});
+      }
       isLoading.value = false;
     }
 

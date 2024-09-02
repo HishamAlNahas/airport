@@ -58,7 +58,7 @@ class _IndexState extends State<Index> with SingleTickerProviderStateMixin {
               child: SizedBox(),
             ),
             Text(
-              df("df_slogan"),
+              '${df("df_title")} ${df('df_subtitle')}',
               style: const TextStyle(fontSize: 16, color: Colors.white),
             )
           ],
