@@ -1,4 +1,4 @@
-package me.opentech.airport.airport
+package me.opentech.airport
 
 import io.flutter.embedding.android.FlutterActivity
 
