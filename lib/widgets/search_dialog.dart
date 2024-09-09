@@ -9,6 +9,7 @@ class SearchDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: SearchBar(
+        autoFocus: true,
         textInputAction: TextInputAction.done,
         onSubmitted: (_) {
           search(context);

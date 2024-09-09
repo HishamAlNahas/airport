@@ -9,37 +9,19 @@ import 'flight_controller.dart';
 
 class SettingsController extends GetxController {
   static String endPoint = FlightController.endPoint;
-  static String siteUrl = "https://beirutairport.gov.lb/";
-  static String localSiteUrl = "https://beirutairport.gov.lb/";
+  // static String siteUrl = "https://beirutairport.gov.lb/";
+  // static String localSiteUrl = "https://beirutairport.gov.lb/";
+  static String siteUrl = "http://192.168.1.170:2039/";
+  static String localSiteUrl = "http://192.168.1.170:2039/";
   static var languages = <String, dynamic>{
     "df_title_en": "Beirut - Rafic Hariri",
     "df_title_ar": "مطار رفيق الحريري",
     "df_subtitle_en": "International Airport",
     "df_subtitle_ar": "الدولي بيروت",
-    /*"df_usage_en": "Long Press on a flight to follow it",
-    "df_usage_ar": "اضغط مطولا على اي رحلة لمتابعتها",
-    "df_arrival_en": "Arrival",
-    "df_arrival_ar": "الوصول",
-    "df_departure_en": "Departure",
-    "df_departure_ar": "المغادرة",
-    "df_time_en": "Time",
-    "df_time_ar": "الوقت",
-    "df_city_en": "City",
-    "df_city_ar": "المدينة",
-    "df_status_en": "Status",
-    "df_status_ar": "الحالة",
-    "df_flight_no_en": "Flight No",
-    "df_flight_no_ar": "رقم الرحلة",
-    "df_search_by_number_or_city_en": "Search by flight number or city name",
-    "df_search_by_number_or_city_ar": "ابحث بإسم المدينة او برقم الرحلة",
-    "df_no_data_en": "No Data",
-    "df_no_data_ar": "لا يجود معلومات",
-    "df_saved_flights_en": "Saved Flights",
-    "df_saved_flights_ar": "الرحلات المحفوظة",*/
   }.obs;
 
   static var preferences = {}.obs;
-  static var lang = "en".obs;
+  static var lang = "ar".obs;
   static var dirc = "ltr".obs;
   static var isLoading = false.obs;
   static Color themeColor = fromHex("#000000");
@@ -53,19 +35,15 @@ class SettingsController extends GetxController {
       response = Cache.get(Cache.settings);
     } else {
       isLoading.value = true;
-      //response = await fetch("$endPoint?action=select");
-      response = {"lang": "en"};
-      var def = await fetch("$endPoint?action=select_def");
-      if (def != null) {
-        languages.assignAll(def);
-        response.addAll({"languages": def});
+      var response = await fetch("$endPoint?action=select_def");
+      if (response["languages"] != null) {
+        languages.assignAll(response["languages"]);
       }
       isLoading.value = false;
     }
 
     if (response.isNotEmpty) {
       Cache.set(Cache.settings, response);
-      //languages.value = response["languages"];
       // preferences.value = response["preferences"];
       setLocale(response["lang"]);
     }
