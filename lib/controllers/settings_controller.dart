@@ -9,10 +9,10 @@ import 'flight_controller.dart';
 
 class SettingsController extends GetxController {
   static String endPoint = FlightController.endPoint;
-  // static String siteUrl = "https://beirutairport.gov.lb/";
-  // static String localSiteUrl = "https://beirutairport.gov.lb/";
-  static String siteUrl = "http://192.168.1.170:2039/";
-  static String localSiteUrl = "http://192.168.1.170:2039/";
+  static String siteUrl = "https://beirutairport.gov.lb/";
+  static String localSiteUrl = "https://beirutairport.gov.lb/";
+  // static String siteUrl = "http://192.168.1.170:2039/";
+  // static String localSiteUrl = "http://192.168.1.170:2039/";
   static var languages = <String, dynamic>{
     "df_title_en": "Beirut - Rafic Hariri",
     "df_title_ar": "مطار رفيق الحريري",
