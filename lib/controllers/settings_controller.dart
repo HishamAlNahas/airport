@@ -21,37 +21,39 @@ class SettingsController extends GetxController {
   }.obs;
 
   static var preferences = {}.obs;
-  static var lang = "ar".obs;
+  static var lang = "${GetStorage().read(StorageKey.lang) ?? 'ar'}".obs;
   static var isLoading = false.obs;
   static Color themeColor = fromHex("#000000");
   static Color themeColor2 = fromHex("#FFFFFF");
 
   static load() async {
     var response = {};
-    var def = await fetch("$endPoint?action=select_def");
-    print(def.runtimeType);
     if (Cache.has(Cache.settings)) {
       response = Cache.get(Cache.settings);
     } else {
       isLoading.value = true;
-      var response = await fetch("$endPoint?action=select_def");
+      response = await fetch("$endPoint?action=select_def");
       if (response["languages"] != null) {
         languages.assignAll(response["languages"]);
       }
       isLoading.value = false;
     }
-
+    print(response);
+    print(response.runtimeType);
     if (response.isNotEmpty) {
       Cache.set(Cache.settings, response);
       // preferences.value = response["preferences"];
-      setLocale(response["lang"]);
+      setLocale(GetStorage().read(StorageKey.lang) ?? response["lang"]);
     }
   }
 
   static setLocale(String lang) {
+    print("Setting locale");
+    print(lang);
     String previousLang = GetStorage().read(StorageKey.lang) ?? "";
     if (previousLang.isNotEmpty) {
       lang = previousLang;
+      print(lang);
     }
     updateLocal(lang);
   }
@@ -66,5 +68,7 @@ class SettingsController extends GetxController {
     Get.updateLocale(locale);
     SettingsController.lang.value = lang;
     GetStorage().write(StorageKey.lang, lang);
+    print("innn");
+    print(GetStorage().read(StorageKey.lang));
   }
 }
