@@ -12,7 +12,7 @@ class SettingsController extends GetxController {
   static String siteUrl = "https://beirutairport.gov.lb/";
   static String localSiteUrl = "https://beirutairport.gov.lb/";
   // static String siteUrl = "http://192.168.1.170:2039/";
-  // static String localSiteUrl = "http://192.168.1.170:2039/";
+  //static String localSiteUrl = "http://192.168.1.170:2039/";
   static var languages = <String, dynamic>{
     "df_title_en": "Beirut - Rafic Hariri",
     "df_title_ar": "مطار رفيق الحريري",
@@ -22,7 +22,6 @@ class SettingsController extends GetxController {
 
   static var preferences = {}.obs;
   static var lang = "ar".obs;
-  static var dirc = "ltr".obs;
   static var isLoading = false.obs;
   static Color themeColor = fromHex("#000000");
   static Color themeColor2 = fromHex("#FFFFFF");

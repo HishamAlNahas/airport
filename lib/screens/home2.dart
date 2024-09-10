@@ -48,189 +48,195 @@ class _HomeState extends State<STable> {
               image: AssetImage("assets/app/wallpaper.jpg"))),
       child: DefaultTabController(
         length: FlightController.dates.length,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-              //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-              backgroundColor: Colors.white,
-              title: Row(
+        child: Directionality(
+          textDirection:
+              dirc() == "rtl" ? TextDirection.rtl : TextDirection.ltr,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+                //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
+                backgroundColor: Colors.white,
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      "assets/app/logo.png",
+                      width: 45,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            df("df_title"),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        FittedBox(
+                          child: Text(
+                            df("df_subtitle"),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                actions: [
+                  IconButton(
+                      onPressed: refresh,
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: Colors.black,
+                      )),
+                  IconButton(
+                      onPressed: () async {
+                        await SettingsController.changeLanguage();
+                        await refresh();
+                      },
+                      icon: const Icon(
+                        Icons.language,
+                        color: Colors.black,
+                      )),
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => SearchDialog(),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      )),
+                ],
+                bottom: PreferredSize(
+                    preferredSize: const Size(double.infinity, 65),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                selectedIndex = 0;
+                                setState(() {});
+                              },
+                              style: ButtonStyle(
+                                  side: WidgetStatePropertyAll(selectedIndex ==
+                                          0
+                                      ? const BorderSide(color: Colors.black)
+                                      : null),
+                                  foregroundColor: selectedIndex == 0
+                                      ? null
+                                      : const WidgetStatePropertyAll(
+                                          Colors.grey)),
+                              child: Row(
+                                children: [
+                                  Text(df('df_arrival')),
+                                  const Icon(
+                                    Icons.flight_land_rounded,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            OutlinedButton(
+                              style: ButtonStyle(
+                                  side: WidgetStatePropertyAll(selectedIndex ==
+                                          1
+                                      ? const BorderSide(color: Colors.black)
+                                      : null),
+                                  foregroundColor: selectedIndex == 1
+                                      ? null
+                                      : const WidgetStatePropertyAll(
+                                          Colors.grey)),
+                              onPressed: () {
+                                selectedIndex = 1;
+                                setState(() {});
+                              },
+                              child: Row(
+                                children: [
+                                  Text(df('df_departure')),
+                                  const Icon(
+                                    Icons.flight_takeoff_rounded,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TabBar(
+                          tabs: tabs,
+                        ),
+                      ],
+                    ))),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    "assets/app/logo.png",
-                    width: 45,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        child: Text(
-                          df("df_title"),
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      FittedBox(
-                        child: Text(
-                          df("df_subtitle"),
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  ),
+                  tableHeader(),
+                  Expanded(child: bodies[selectedIndex]),
                 ],
               ),
-              actions: [
-                IconButton(
-                    onPressed: refresh,
-                    icon: const Icon(
-                      Icons.refresh,
-                      color: Colors.black,
-                    )),
-                IconButton(
-                    onPressed: () async {
-                      await SettingsController.changeLanguage();
-                      await refresh();
-                    },
-                    icon: const Icon(
-                      Icons.language,
-                      color: Colors.black,
-                    )),
-                IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => SearchDialog(),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    )),
-              ],
-              bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 65),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              selectedIndex = 0;
-                              setState(() {});
-                            },
-                            style: ButtonStyle(
-                                side: WidgetStatePropertyAll(selectedIndex == 0
-                                    ? const BorderSide(color: Colors.black)
-                                    : null),
-                                foregroundColor: selectedIndex == 0
-                                    ? null
-                                    : const WidgetStatePropertyAll(
-                                        Colors.grey)),
-                            child: Row(
-                              children: [
-                                Text(df('df_arrival')),
-                                const Icon(
-                                  Icons.flight_land_rounded,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                          OutlinedButton(
-                            style: ButtonStyle(
-                                side: WidgetStatePropertyAll(selectedIndex == 1
-                                    ? const BorderSide(color: Colors.black)
-                                    : null),
-                                foregroundColor: selectedIndex == 1
-                                    ? null
-                                    : const WidgetStatePropertyAll(
-                                        Colors.grey)),
-                            onPressed: () {
-                              selectedIndex = 1;
-                              setState(() {});
-                            },
-                            child: Row(
-                              children: [
-                                Text(df('df_departure')),
-                                const Icon(
-                                  Icons.flight_takeoff_rounded,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TabBar(
-                        tabs: tabs,
-                      ),
-                    ],
-                  ))),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                tableHeader(),
-                Expanded(child: bodies[selectedIndex]),
-              ],
             ),
-          ),
-          /*bottomNavigationBar: BottomNavigationBar(
-            elevation: 0,
-            backgroundColor: SettingsController.themeColor.withOpacity(0.6),
-            type: BottomNavigationBarType.fixed,
-            // Ensures all items are visible
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              selectedIndex = index;
-              setState(() {});
-            },
-            selectedItemColor: Colors.white,
-            // Highlighted tab color
-            unselectedItemColor: Colors.grey,
-            // Unselected tab color
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            // Bold text for selected item
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_land_rounded,
-                  size: 20,
+            /*bottomNavigationBar: BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: SettingsController.themeColor.withOpacity(0.6),
+              type: BottomNavigationBarType.fixed,
+              // Ensures all items are visible
+              currentIndex: selectedIndex,
+              onTap: (index) {
+                selectedIndex = index;
+                setState(() {});
+              },
+              selectedItemColor: Colors.white,
+              // Highlighted tab color
+              unselectedItemColor: Colors.grey,
+              // Unselected tab color
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              // Bold text for selected item
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(
+                    Icons.flight_land_rounded,
+                    size: 20,
+                  ),
+                  label: df('df_arrival'),
                 ),
-                label: df('df_arrival'),
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.flight_takeoff_rounded,
-                  size: 20,
+                BottomNavigationBarItem(
+                  icon: const Icon(
+                    Icons.flight_takeoff_rounded,
+                    size: 20,
+                  ),
+                  label: df('df_departure'),
                 ),
-                label: df('df_departure'),
+              ],
+            ),*/
+            floatingActionButton: FloatingActionButton(
+              mini: true,
+              onPressed: () {
+                Get.to(() => SavedFlights());
+              },
+              child: const Icon(
+                Icons.bookmark_rounded,
+                color: Colors.black,
               ),
-            ],
-          ),*/
-          floatingActionButton: FloatingActionButton(
-            mini: true,
-            onPressed: () {
-              Get.to(() => SavedFlights());
-            },
-            child: const Icon(
-              Icons.bookmark_rounded,
-              color: Colors.black,
             ),
           ),
         ),
