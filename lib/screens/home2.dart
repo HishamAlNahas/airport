@@ -4,12 +4,16 @@ import 'package:airport/controllers/flight_controller.dart';
 import 'package:airport/screens/saved_flights.dart';
 import 'package:airport/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/settings_controller.dart';
 import '../helpers/globals.dart';
+import '../widgets/MyWarningDialog.dart';
 import '../widgets/common.dart';
+import '../widgets/flight_card2.dart';
 
 class STable extends StatefulWidget {
   const STable({super.key});
@@ -34,208 +38,221 @@ class _HomeState extends State<STable> {
 
   int selectedIndex = 0;
 
+  Future<bool> onPop() async {
+    showDialog(
+        context: context,
+        builder: (context) => MyWarningDialog(
+              onWarningPressed: () {
+                FlutterExitApp.exitApp();
+              },
+              translationsWarningButton: df("df_exit"),
+              translationsTitle: df("df_exit_message"),
+              translationsCancelButton: df("df_cancel"),
+            ));
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Text> tabs = [];
     for (var date in FlightController.dates) {
       tabs.add(Text(date['STM_DATE']));
     }
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              opacity: 0.5,
-              image: AssetImage("assets/app/wallpaper.jpg"))),
-      child: DefaultTabController(
-        length: FlightController.dates.length,
-        child: Directionality(
-          textDirection:
-              dirc() == "rtl" ? TextDirection.rtl : TextDirection.ltr,
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-                //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
-                backgroundColor: Colors.white,
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      "assets/app/logo.png",
-                      width: 45,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Text(
-                            df("df_title"),
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        onPop();
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                opacity: 0.5,
+                image: AssetImage("assets/app/wallpaper.jpg"))),
+        child: DefaultTabController(
+          length: FlightController.dates.length,
+          child: Directionality(
+            textDirection:
+                dirc() == "rtl" ? TextDirection.rtl : TextDirection.ltr,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                  //backgroundColor: SettingsController.themeColor.withOpacity(0.7),
+                  backgroundColor: Colors.white,
+                  title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/app/logo.png",
+                        width: 45,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            child: Text(
+                              df("df_title"),
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        FittedBox(
-                          child: Text(
-                            df("df_subtitle"),
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ),
+                          FittedBox(
+                            child: Text(
+                              df("df_subtitle"),
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                        onPressed: refresh,
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: Colors.black,
+                        )),
+                    IconButton(
+                        onPressed: () async {
+                          await SettingsController.changeLanguage();
+                          await refresh();
+                        },
+                        icon: const Icon(
+                          Icons.language,
+                          color: Colors.black,
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => SearchDialog(),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        )),
                   ],
-                ),
-                actions: [
-                  IconButton(
-                      onPressed: refresh,
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: Colors.black,
-                      )),
-                  IconButton(
-                      onPressed: () async {
-                        await SettingsController.changeLanguage();
-                        await refresh();
-                      },
-                      icon: const Icon(
-                        Icons.language,
-                        color: Colors.black,
-                      )),
-                  IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => SearchDialog(),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      )),
-                ],
-                bottom: PreferredSize(
-                    preferredSize: const Size(double.infinity, 65),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                selectedIndex = 0;
-                                setState(() {});
-                              },
-                              style: ButtonStyle(
-                                  side: WidgetStatePropertyAll(selectedIndex ==
-                                          0
-                                      ? const BorderSide(color: Colors.black)
-                                      : null),
-                                  foregroundColor: selectedIndex == 0
-                                      ? null
-                                      : const WidgetStatePropertyAll(
-                                          Colors.grey)),
-                              child: Row(
-                                children: [
-                                  Text(df('df_arrival')),
-                                  const Icon(
-                                    Icons.flight_land_rounded,
-                                    size: 20,
-                                  ),
-                                ],
+                  bottom: PreferredSize(
+                      preferredSize: const Size(double.infinity, 65),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              OutlinedButton(
+                                onPressed: () {
+                                  selectedIndex = 0;
+                                  setState(() {});
+                                },
+                                style: ButtonStyle(
+                                    side: WidgetStatePropertyAll(
+                                        selectedIndex == 0
+                                            ? const BorderSide(
+                                                color: Colors.black)
+                                            : null),
+                                    foregroundColor: selectedIndex == 0
+                                        ? null
+                                        : const WidgetStatePropertyAll(
+                                            Colors.grey)),
+                                child: Row(
+                                  children: [
+                                    Text(df('df_arrival')),
+                                    const Icon(
+                                      Icons.flight_land_rounded,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            OutlinedButton(
-                              style: ButtonStyle(
-                                  side: WidgetStatePropertyAll(selectedIndex ==
-                                          1
-                                      ? const BorderSide(color: Colors.black)
-                                      : null),
-                                  foregroundColor: selectedIndex == 1
-                                      ? null
-                                      : const WidgetStatePropertyAll(
-                                          Colors.grey)),
-                              onPressed: () {
-                                selectedIndex = 1;
-                                setState(() {});
-                              },
-                              child: Row(
-                                children: [
-                                  Text(df('df_departure')),
-                                  const Icon(
-                                    Icons.flight_takeoff_rounded,
-                                    size: 20,
-                                  ),
-                                ],
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                    side: WidgetStatePropertyAll(
+                                        selectedIndex == 1
+                                            ? const BorderSide(
+                                                color: Colors.black)
+                                            : null),
+                                    foregroundColor: selectedIndex == 1
+                                        ? null
+                                        : const WidgetStatePropertyAll(
+                                            Colors.grey)),
+                                onPressed: () {
+                                  selectedIndex = 1;
+                                  setState(() {});
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(df('df_departure')),
+                                    const Icon(
+                                      Icons.flight_takeoff_rounded,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        TabBar(
-                          tabs: tabs,
-                        ),
-                      ],
-                    ))),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          TabBar(
+                            tabs: tabs,
+                          ),
+                        ],
+                      ))),
+              body: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  tableHeader(),
-                  Expanded(child: bodies[selectedIndex]),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 8, left: 8),
+                    child: tableHeader(),
+                  ),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: bodies[selectedIndex],
+                  )),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Center(
+                      child: InkWell(
+                        onTap: () async {
+                          await launchUrl(Uri.parse('https://opentech.me/'));
+                        },
+                        child: Text(
+                          "${df("df_developed_by")} OpenTech",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
-            ),
-            /*bottomNavigationBar: BottomNavigationBar(
-              elevation: 0,
-              backgroundColor: SettingsController.themeColor.withOpacity(0.6),
-              type: BottomNavigationBarType.fixed,
-              // Ensures all items are visible
-              currentIndex: selectedIndex,
-              onTap: (index) {
-                selectedIndex = index;
-                setState(() {});
-              },
-              selectedItemColor: Colors.white,
-              // Highlighted tab color
-              unselectedItemColor: Colors.grey,
-              // Unselected tab color
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-              // Bold text for selected item
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.flight_land_rounded,
-                    size: 20,
-                  ),
-                  label: df('df_arrival'),
+              floatingActionButton: FloatingActionButton(
+                mini: true,
+                onPressed: () {
+                  Get.offAll(() => SavedFlights());
+                },
+                child: const Icon(
+                  Icons.bookmark_rounded,
+                  color: Colors.black,
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.flight_takeoff_rounded,
-                    size: 20,
-                  ),
-                  label: df('df_departure'),
-                ),
-              ],
-            ),*/
-            floatingActionButton: FloatingActionButton(
-              mini: true,
-              onPressed: () {
-                Get.to(() => SavedFlights());
-              },
-              child: const Icon(
-                Icons.bookmark_rounded,
-                color: Colors.black,
               ),
             ),
           ),
@@ -267,45 +284,6 @@ class _HomeState extends State<STable> {
   }
 
   flightsList(data) {
-    /*List<Widget> list = [];
-    for (int i = 0; i < FlightController.dates.length; i++) {
-      var date = FlightController.dates[i]['STM_DATE'];
-      list.add(Obx(() {
-        var flightsPerDay = flights[date];
-
-        if (flightsPerDay == null || flightsPerDay.length == 0) {
-          return Center(
-            child: Text(df("df_no_data")),
-          );
-        } else {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              Color? bg;
-              /*List? saved = GetStorage().read('saved_flights');
-              List<String> flights_no = [];
-              for (var flight in saved ?? []) {
-                flights_no.add(flight['flight_no']);
-              }
-              if (flights_no.contains(flightsPerDay[index]['flight_no'])) {
-                bg = Colors.yellow.shade100;
-              } else {
-                bg = null;
-              }*/
-
-              return flightCard2(
-                  background: bg,
-                  data: flights[index],
-                  onLongPress: () {
-                    save(flights[index]);
-                  });
-            },
-            itemCount: flights.length,
-          );
-        }
-      }));
-    }
-    return TabBarView(children: list);*/
-
     List<Widget> list = [];
     for (int i = 0; i < FlightController.dates.length; i++) {
       var date = FlightController.dates[i]['STM_DATE'];
@@ -320,22 +298,22 @@ class _HomeState extends State<STable> {
           onRefresh: () => FlightController.load(),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              Color? background;
+              bool isSaved = false;
               List? saved = GetStorage().read('saved_flights');
               List<String> flightsNo = [];
               for (var flight in saved ?? []) {
                 flightsNo.add(flight['flight_no']);
               }
               if (flightsNo.contains(flights[index]['flight_no'])) {
-                background = Colors.red.withOpacity(0.1);
+                isSaved = true;
               } else {
-                background = null;
+                isSaved = false;
               }
-              return flightCard2(
-                  background: background,
+              return FlightCard2(
+                  isSaved: isSaved,
                   data: flights[index],
                   onLongPress: () {
-                    background == null
+                    isSaved == false
                         ? FlightController.save(flights[index])
                         : FlightController.delete(flights[index]['flight_no']);
                   });
@@ -349,5 +327,3 @@ class _HomeState extends State<STable> {
     return TabBarView(children: list);
   }
 }
-
-//color the saved with lighter color

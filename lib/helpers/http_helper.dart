@@ -16,7 +16,7 @@ class HttpHelper {
     String separator = url.contains("?") ? "&" : "?";
     url = "$url${separator}lang=${lang()}";
 
-    parr("URL: $url?lang=en");
+    parr("URL: $url");
     parr("REQUEST BODY: ${body.toString()}");
 
     String type = (body == null) ? "get" : "post";

@@ -154,7 +154,8 @@ class FlightController extends GetxController {
       (element) => element['flight_no'] == id,
     );
     GetStorage().write("saved_flights", saved);
-    await load();
+
+    // await load();
   }
 
   static save(row) async {
@@ -174,6 +175,6 @@ class FlightController extends GetxController {
       }
     }
     GetStorage().write('saved_flights', res);
-    await load();
+    //await load();
   }
 }

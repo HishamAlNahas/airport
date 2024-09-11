@@ -203,75 +203,89 @@ SnackbarController toast(
 }
 
 Widget flightCard2(
-    {var data, Function? onLongPress, bool isBold = false, Color? background}) {
-  return InkWell(
-    onLongPress: () {
-      onLongPress != null ? onLongPress() : null;
-    },
-    child: Column(
-      children: [
-        Container(
-          color: background,
-          child: Row(
-            children: [
-              SizedBox(
-                width: 50,
-                child:
-                    data['company_logo'] != null && data['company_logo'] != ""
-                        ? Image.network(
-                            data['company_logo'],
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return const SizedBox();
-                            },
-                          )
-                        : null,
-              ),
+    {var data,
+    Function? onLongPress,
+    bool isBold = false,
+    bool isSaved = false}) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      InkWell(
+        onLongPress: () {
+          onLongPress != null ? onLongPress() : null;
+        },
+        child: Row(
+          children: [
+            SizedBox(
+              width: 50,
+              child: data['company_logo'] != null && data['company_logo'] != ""
+                  ? Image.network(
+                      data['company_logo'],
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return const SizedBox();
+                      },
+                    )
+                  : null,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Expanded(
+                child: Text(
+                    style: colorStyle(
+                        isSmall: true,
+                        isBold: true,
+                        color: isBold ? Colors.yellowAccent : Colors.white70),
+                    "${data?['flight_no'] ?? ""}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(
+                        isSmall: true,
+                        isBold: true,
+                        color: isBold ? Colors.yellowAccent : Colors.white70),
+                    "${data?["normal_time"] ?? ""}")),
+            Expanded(
+                child: Text(
+                    style: colorStyle(
+                        isSmall: true,
+                        isBold: true,
+                        color: isBold ? Colors.yellowAccent : Colors.white70),
+                    "${data?["city_name"] ?? ""}")),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
+            // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
+            Expanded(
+                child: Text(
+                    style: colorStyle(
+                        isSmall: true,
+                        isBold: true,
+                        color: isBold ? Colors.yellowAccent : Colors.white70),
+                    '${data?["status"] ?? ""}')),
+            if (isSaved)
+              const Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                child: Icon(
+                  Icons.star_rate_rounded,
+                  size: 15,
+                  color: Colors.yellowAccent,
+                ),
+              )
+            else
               const SizedBox(
-                width: 5,
+                width: 20,
               ),
-              Expanded(
-                  child: Text(
-                      style: colorStyle(
-                          isSmall: true,
-                          isBold: true,
-                          color: isBold ? Colors.yellowAccent : Colors.white70),
-                      "${data?['flight_no'] ?? ""}")),
-              Expanded(
-                  child: Text(
-                      style: colorStyle(
-                          isSmall: true,
-                          isBold: true,
-                          color: isBold ? Colors.yellowAccent : Colors.white70),
-                      "${data?["normal_time"] ?? ""}")),
-              Expanded(
-                  child: Text(
-                      style: colorStyle(
-                          isSmall: true,
-                          isBold: true,
-                          color: isBold ? Colors.yellowAccent : Colors.white70),
-                      "${data?["city_name"] ?? ""}")),
-              // Expanded(child: Text(style: colorStyle(isSmall: true), data["VIA"])),
-              // Expanded(child: Text(style: colorStyle(isSmall: true), data['_path'])),
-              Expanded(
-                  child: Text(
-                      style: colorStyle(
-                          isSmall: true,
-                          isBold: true,
-                          color: isBold ? Colors.yellowAccent : Colors.white70),
-                      '${data?["status"] ?? ""}')),
-              /*Expanded(
-                  child: Text(
-                      style: colorStyle(isSmall: true),
-                      "${data["estmtd_real_time"]}")),*/
-            ],
-          ),
+
+            /*Expanded(
+                child: Text(
+                    style: colorStyle(isSmall: true),
+                    "${data["estmtd_real_time"]}")),*/
+          ],
         ),
-        const Divider(
-          color: Colors.white54,
-        ),
-      ],
-    ),
+      ),
+      const Divider(
+        color: Colors.white54,
+      ),
+    ],
   );
 }
 
