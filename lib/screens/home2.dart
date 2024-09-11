@@ -62,7 +62,7 @@ class _HomeState extends State<STable> {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvoked: (didPop){
         if (didPop) {
           return;
         }
@@ -245,6 +245,7 @@ class _HomeState extends State<STable> {
                 ],
               ),
               floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.white,
                 mini: true,
                 onPressed: () {
                   Get.offAll(() => SavedFlights());
