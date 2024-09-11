@@ -64,9 +64,17 @@ class _SavedFlightsState extends State<SavedFlights> {
                     children: saved != null && saved!.isNotEmpty
                         ? data
                         : [
-                            Center(
-                              child: Text(df("df_usage")),
-                            )
+                            br(),
+                            Text(
+                              df("df_usage"),
+                              textAlign: TextAlign.center,
+                            ),
+                            Image.asset(
+                              "assets/images/usage.png",
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.contain,
+                            ),
                           ],
                   ),
                 ),
