@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../controllers/settings_controller.dart';
 import '../helpers/http_helper.dart';
+import '../widgets/MyWarningDialog.dart';
 
 String df(String key) {
   return SettingsController.languages["${key}_${lang()}"] ?? key;
@@ -69,4 +72,25 @@ parr(var data) {
   if (kDebugMode) {
     log(data);
   }
+}
+exitApp(){
+  if (Platform.isAndroid) {
+    SystemNavigator.pop();
+  } else if (Platform.isIOS) {
+    exit(0);
+  }
+}
+Future<bool> onPop(context) async {
+  showDialog(
+      context: context,
+      builder: (context) => MyWarningDialog(
+        onWarningPressed: () {
+          exitApp();
+        },
+        translationsWarningButton: df("df_exit"),
+        translationsTitle: df("df_exit_message"),
+        translationsCancelButton: df("df_cancel"),
+      ));
+
+  return false;
 }

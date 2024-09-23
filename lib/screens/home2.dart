@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:airport/controllers/flight_controller.dart';
 import 'package:airport/screens/saved_flights.dart';
@@ -38,20 +39,6 @@ class _HomeState extends State<STable> {
 
   int selectedIndex = 0;
 
-  Future<bool> onPop() async {
-    showDialog(
-        context: context,
-        builder: (context) => MyWarningDialog(
-              onWarningPressed: () {
-                FlutterExitApp.exitApp();
-              },
-              translationsWarningButton: df("df_exit"),
-              translationsTitle: df("df_exit_message"),
-              translationsCancelButton: df("df_cancel"),
-            ));
-
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +53,7 @@ class _HomeState extends State<STable> {
         if (didPop) {
           return;
         }
-        onPop();
+        onPop(context);
       },
       child: Container(
         decoration: const BoxDecoration(
