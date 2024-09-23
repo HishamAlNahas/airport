@@ -97,7 +97,7 @@ class _FlightCard2State extends State<FlightCard2> {
                   widget.isSaved
                       ? Icons.bookmark_rounded
                       : Icons.bookmark_outline_rounded,
-                  size: 15,
+                  size: 20,
                   color: Colors.yellowAccent,
                 ),
               )
