@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:airport/helpers/globals.dart';
 import 'package:airport/screens/home2.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../controllers/flight_controller.dart';
-import '../widgets/MyWarningDialog.dart';
 import '../widgets/common.dart';
 import '../widgets/flight_card2.dart';
 
@@ -20,7 +17,6 @@ class SavedFlights extends StatefulWidget {
 
 class _SavedFlightsState extends State<SavedFlights> {
   List? saved = GetStorage().read("saved_flights");
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +33,8 @@ class _SavedFlightsState extends State<SavedFlights> {
             }));
       }
     }
-    return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) {
-            return;
-          }
-          onPop(context);
-        },
-        child: Container(
+
+    return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
@@ -75,18 +64,18 @@ class _SavedFlightsState extends State<SavedFlights> {
                     children: saved != null && saved!.isNotEmpty
                         ? data
                         : [
-                      br(),
-                      Text(
-                        df("df_usage"),
-                        textAlign: TextAlign.center,
-                      ),
-                      Image.asset(
-                        "assets/images/usage.png",
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.contain,
-                      ),
-                    ],
+                            br(),
+                            Text(
+                              df("df_usage"),
+                              textAlign: TextAlign.center,
+                            ),
+                            Image.asset(
+                              "assets/images/usage.png",
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.contain,
+                            ),
+                          ],
                   ),
                 ),
               ],
@@ -94,8 +83,6 @@ class _SavedFlightsState extends State<SavedFlights> {
           ),
         ),
       ),
-    )
     );
-
   }
 }
